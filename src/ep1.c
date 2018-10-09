@@ -6,6 +6,8 @@
 
 #include "ep1.h"
 
+char table[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
 char *convert_to_bin(double number)
 {
 	double num_int, num_frac;
@@ -19,7 +21,7 @@ char *convert_to_bin(double number)
 		char aux[30];
 
 		do{
-			aux[position++] = (char)('0' + (int)fmod(num_int, 2));
+			aux[position++] = table[ (int)num_int % 2 ];
 			num_int = floor(num_int/2);
 		} while (num_int > 0);
 
@@ -33,12 +35,12 @@ char *convert_to_bin(double number)
 
 	if(num_frac != 0){
 		double bit;
-		int max_digits = 0;
-		while (num_frac > 0 && max_digits < 20) {
+		int max_digits = 20;
+		while (num_frac > 0 && max_digits > 0) {
 			num_frac *= 2;
 			num_frac = modf(num_frac, &bit);
-			bin[position++] = (char)('0' + (int)bit);
-			max_digits++;
+			bin[position++] = table[ (int)bit ];
+			max_digits--;
 		}
 	} else {
 		bin[position] = '0';
