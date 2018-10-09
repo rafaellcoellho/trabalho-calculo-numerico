@@ -8,11 +8,11 @@ build/
 
 checkpatch.pl
 cleanfile
-template
-template_tests
+trabalho-calculo-numerico
+trabalho-calculo-numerico_tests
 coverage.info
 
-trabalho-calculo-numerico
+
 
 # Created by https://www.gitignore.io/api/c
 
