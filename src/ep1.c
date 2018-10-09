@@ -22,7 +22,7 @@ char *convert(double number, int base)
 
 		do{
 			aux[position++] = table[ (int)num_int % base ];
-			num_int = floor(num_int/2);
+			num_int = floor(num_int/base);
 		} while (num_int > 0);
 
 		for(int i = 0; i < position; i++)
