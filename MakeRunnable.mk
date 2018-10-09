@@ -22,7 +22,7 @@ CC_FLAGS=-c         \
 	 	 -g	   		\
          -W         \
          -Wall      \
-         -std=c11   \
+         -std=c99   \
          -pedantic
 
 #
@@ -32,7 +32,7 @@ all: $(PROJ_NAME)
 
 $(PROJ_NAME): $(OBJ)
 	@ echo 'Building binary using GCC linker: $@'
-	$(CC) $^ -o $@
+	$(CC) $^ -lm -o $@
 	@ echo 'Finished building binary: $@'
 	@ echo ' '
 

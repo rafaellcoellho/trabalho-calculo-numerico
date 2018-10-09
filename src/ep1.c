@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
 
-// Para permitir o teste das funções
 #include "ep1.h"
 
 char *convert_to_bin(double number)
@@ -45,7 +45,7 @@ char *convert_to_bin(double number)
 	return bin;
 }
 
-int main(void)
+void menu(void)
 {
 	char raw_input[2];
 	int menu_option;
@@ -83,7 +83,5 @@ int main(void)
 				break;
 		}
 
-	}while(menu_option != 'F');
-	
-	return 0;
+	} while (menu_option != 'F');
 }
