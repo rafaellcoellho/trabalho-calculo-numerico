@@ -9,7 +9,7 @@ endif
 ## CppUTest configurations ##
 # Read header comment on file `$(CPPUTEST_HOME)/build/MakefileWorker.mk` to understand these definitions.
 
-COMPONENT_NAME = template
+COMPONENT_NAME = trabalho-calculo-numerico
 CPPUTEST_HOME = cpputest
 
 CPPUTEST_ENABLE_DEBUG = Y
