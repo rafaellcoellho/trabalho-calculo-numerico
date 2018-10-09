@@ -31,6 +31,12 @@ TEST(ep1, convert_to_bin_without_decimal)
 	STRCMP_EQUAL("1000.0", array);
 }
 
+TEST(ep1, convert_to_bin_with_decimal_zero)
+{
+	array = convert_to_bin(8.0);
+	STRCMP_EQUAL("1000.0", array);
+}
+
 TEST(ep1, convert_to_bin_with_decimal)
 {
 	array = convert_to_bin(785.125);
