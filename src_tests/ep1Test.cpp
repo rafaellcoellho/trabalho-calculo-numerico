@@ -36,3 +36,15 @@ TEST(ep1, convert_to_bin_with_decimal)
 	array = convert_to_bin(785.125);
 	STRCMP_EQUAL("1100010001.001", array);
 }
+
+TEST(ep1, convert_to_bin_decimal_number)
+{
+	array = convert_to_bin(0.125);
+	STRCMP_EQUAL("0.001", array);
+}
+
+TEST(ep1, convert_to_bin_periodical)
+{
+	array = convert_to_bin(0.1);
+	STRCMP_EQUAL("0.00011001100110011001", array);
+}
