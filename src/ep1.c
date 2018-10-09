@@ -33,10 +33,12 @@ char *convert_to_bin(double number)
 
 	if(num_frac != 0){
 		double bit;
-		while (num_frac > 0) {
+		int max_digits = 0;
+		while (num_frac > 0 && max_digits < 20) {
 			num_frac *= 2;
 			num_frac = modf(num_frac, &bit);
 			bin[position++] = (char)('0' + (int)bit);
+			max_digits++;
 		}
 	} else {
 		bin[position] = '0';

@@ -2,6 +2,6 @@
 #define _H_EP1
 
 char *convert_to_bin(double number);
-void menu(void);
+void menu(void);    
 
 #endif
