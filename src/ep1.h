@@ -1,6 +1,6 @@
 #ifndef _H_EP1
 #define _H_EP1
 
-char *helloWorld(void);
+char *convert_to_bin(double number);
 
 #endif

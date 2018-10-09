@@ -1,9 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
+#include <string.h>
+#include <math.h>
 
 // Para permitir o teste das funções
 #include "ep1.h"
+
+char *convert_to_bin(double number)
+{
+	double num_int, num_frac;
+	char *bin = calloc(50, sizeof(char));
+	int position = 0;
+	
+	// Separa a parte inteira da fracionária
+	num_frac = modf(number, &num_int);
+
+	if(num_int != 0){
+		char aux[30];
+
+		do{
+			aux[position++] = (char)('0' + (int)fmod(num_int, 2));
+			num_int = floor(num_int/2);
+		} while (num_int > 0);
+
+		for(int i = 0; i < position; i++)
+			bin[i] = aux[position-i-1];
+	} else {
+		bin[position++] = '0';
+	}
+
+	bin[position++] = '.';
+
+	if(num_frac != 0){
+		double bit;
+		while (num_frac > 0) {
+			num_frac *= 2;
+			num_frac = modf(num_frac, &bit);
+			bin[position++] = (char)('0' + (int)bit);
+		}
+	} else {
+		bin[position] = '0';
+	}
+
+	return bin;
+}
 
 int main(void)
 {
