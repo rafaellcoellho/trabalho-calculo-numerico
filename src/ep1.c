@@ -6,7 +6,7 @@
 
 #include "ep1.h"
 
-char table[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+char int_to_ascii[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
 char *convert(double number, int base)
 {
@@ -21,7 +21,7 @@ char *convert(double number, int base)
 		char aux[30];
 
 		do{
-			aux[position++] = table[ (int)num_int % base ];
+			aux[position++] = int_to_ascii[ (int)num_int % base ];
 			num_int = floor(num_int/base);
 		} while (num_int > 0);
 
@@ -39,7 +39,7 @@ char *convert(double number, int base)
 		while (num_frac > 0 && max_digits > 0) {
 			num_frac *= base;
 			num_frac = modf(num_frac, &bit);
-			bin[position++] = table[ (int)bit ];
+			bin[position++] = int_to_ascii[ (int)bit ];
 			max_digits--;
 		}
 	} else {
