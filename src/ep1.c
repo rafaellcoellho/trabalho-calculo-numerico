@@ -7,6 +7,7 @@
 
 int main(void)
 {
+	char raw_input[2];
 	int menu_option;
 
 	do{
@@ -16,12 +17,9 @@ int main(void)
 		printf("E - Equacao Algebrica\n");
 		printf("F - Finalizar\n");
 		printf("Escolha uma opcao: ");
-		menu_option = getchar();
+		scanf("%s", raw_input);	
 
-		// Descarta o enter
-		getchar();		
-
-		menu_option = toupper(menu_option);
+		menu_option = toupper(raw_input[0]);
 
 		switch (menu_option){
 			case 'C':
