@@ -53,6 +53,7 @@ void menu(void)
 {
 	char raw_input[2];
 	int menu_option;
+	double number;
 
 	do{
 		printf("\n");
@@ -67,7 +68,12 @@ void menu(void)
 
 		switch (menu_option){
 			case 'C':
-				printf("Digite um numero para ser convertido: \n");
+				printf("Digite um numero para ser convertido: ");
+				scanf("%lf", &number);
+				printf("\nBin: %s", convert(number, 2));
+				printf("\nOctal: %s", convert(number, 8));
+				printf("\nHex: %s", convert(number, 16));
+				printf("\n");
 				break;
 
 			case 'S':
