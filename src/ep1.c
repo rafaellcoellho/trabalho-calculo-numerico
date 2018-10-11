@@ -52,9 +52,10 @@ char *convert(double number, int base)
 }
 
 
-void gaussianJordanElimination(double **m, int n)
+void gaussianJordanElimination(double **m, int n, int *x)
 {
 	int i, j, k; // Iteradores
+	x[0] = 1; x[1] = 2; x[2] = 3;
 
 	for(i=0;i<n;i++){
 		if(m[i][i] == 0){
@@ -65,6 +66,8 @@ void gaussianJordanElimination(double **m, int n)
 				double aux;
 				for(k=0;k<n;k++){
 					aux = m[k][i];
+					x[i] = j+1;
+					x[j] = i+1;
 					m[k][i] = m[k][j];
 					m[k][j] = aux;
 				}

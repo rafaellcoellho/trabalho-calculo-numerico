@@ -134,7 +134,9 @@ TEST(ep2, jordan_com_diagonal_nao_nula) {
 		{ 0 , 0 ,6.571 , 6.571 }
 	};
 
-	gaussianJordanElimination(m, 3);
+	int x[3];
+
+	gaussianJordanElimination(m, 3, x);
 
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
@@ -169,7 +171,9 @@ TEST(ep2, jordan_com_pivo_zero) {
 		{ 0 , 0 , 0 ,  0 }
 	};
 
-	gaussianJordanElimination(m, 3);
+	int x[3];
+
+	gaussianJordanElimination(m, 3, x);
 
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
@@ -177,6 +181,62 @@ TEST(ep2, jordan_com_pivo_zero) {
 		}
 	}
 
+	
+	for (int i = 0; i < 3; i++) {
+		free(m[i]);
+	}
+	free(m);
+}
+
+TEST(ep2, jordan_disposicao_normal_variaveis) {
+	double m_valores[3][4] = {
+		{ 1 , 5 ,-2 ,11 },
+		{-2 , 4 , 1 , 3 },
+		{ 3 ,-1 , 4 ,11 }
+	};
+
+	double **m = allocateMatrix(3,4);
+	for(int i = 0; i<3; i++){
+		for(int j = 0; j<4; j++) {
+			m[i][j] = m_valores[i][j];
+		}
+	}
+
+	int x[3];
+
+	gaussianJordanElimination(m, 3, x);
+
+	CHECK_EQUAL(x[0], 1);
+	CHECK_EQUAL(x[1], 2);
+	CHECK_EQUAL(x[2], 3);
+	
+	for (int i = 0; i < 3; i++) {
+		free(m[i]);
+	}
+	free(m);
+}
+
+TEST(ep2, jordan_disposica0_alterada_variaveis) {
+	double m_valores[3][4] = {
+		{ 2 ,-2 , 4 , 6 },
+		{ 2 ,-2 , 1 ,-9 },
+		{-1 , 1 ,-1 , 2 }
+	};
+
+	double **m = allocateMatrix(3,4);
+	for(int i = 0; i<3; i++){
+		for(int j = 0; j<4; j++) {
+			m[i][j] = m_valores[i][j];
+		}
+	}
+
+	int x[3];
+
+	gaussianJordanElimination(m, 3, x);
+
+	CHECK_EQUAL(x[0], 1);
+	CHECK_EQUAL(x[1], 3);
+	CHECK_EQUAL(x[2], 2);
 	
 	for (int i = 0; i < 3; i++) {
 		free(m[i]);
