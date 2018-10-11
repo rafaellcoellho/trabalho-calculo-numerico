@@ -114,11 +114,11 @@ TEST(ep1, convert_to_octal_decimal_number)
 	Testes Método de Jordan
 */
 
-TEST(ep2, jordan_com_pivo_zero) {
+TEST(ep2, jordan_com_diagonal_nao_nula) {
 	double m_valores[3][4] = {
-		{2,-2,4,6},
-		{2,-2,1,-9},
-		{-1,1,-1,2}
+		{ 1 , 5 ,-2 ,11 },
+		{-2 , 4 , 1 , 3 },
+		{ 3 ,-1 , 4 ,11 }
 	};
 
 	double **m = allocateMatrix(3,4);
@@ -129,16 +129,51 @@ TEST(ep2, jordan_com_pivo_zero) {
 	}
 
 	double m_resposta[3][4] = {
-		{2,0,0,-14},
-		{0,-3,0,-15},
-		{0,0,0,0}
+		{ 1 , 0 , 0 , 3 },
+		{ 0 ,14 , 0 , 28 },
+		{ 0 , 0 ,6.571 , 6.571 }
 	};
 
 	gaussianJordanElimination(m, 3);
 
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
-			CHECK_EQUAL(m[i][j], m_resposta[i][j]);
+			DOUBLES_EQUAL(m[i][j], m_resposta[i][j], 0.001);
+		}
+	}
+
+	
+	for (int i = 0; i < 3; i++) {
+		free(m[i]);
+	}
+	free(m);
+}
+
+TEST(ep2, jordan_com_pivo_zero) {
+	double m_valores[3][4] = {
+		{ 2 ,-2 , 4 , 6 },
+		{ 2 ,-2 , 1 ,-9 },
+		{-1 , 1 ,-1 , 2 }
+	};
+
+	double **m = allocateMatrix(3,4);
+	for(int i = 0; i<3; i++){
+		for(int j = 0; j<4; j++) {
+			m[i][j] = m_valores[i][j];
+		}
+	}
+
+	double m_resposta[3][4] = {
+		{ 2 , 0 , 0 ,-14 },
+		{ 0 ,-3 , 0 ,-15 },
+		{ 0 , 0 , 0 ,  0 }
+	};
+
+	gaussianJordanElimination(m, 3);
+
+	for(int i = 0; i<3; i++){
+		for(int j = 0; j<4; j++) {
+			DOUBLES_EQUAL(m[i][j], m_resposta[i][j], 0.001);
 		}
 	}
 
