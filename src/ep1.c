@@ -52,7 +52,7 @@ char *convert(double number, int base)
 }
 
 
-void gaussianJordanElimination(double m[][4], int n)
+void gaussianJordanElimination(double **m, int n)
 {
 	int i, j, k; // Iteradores
 
@@ -85,6 +85,28 @@ void gaussianJordanElimination(double m[][4], int n)
 			}
 		}
 	}
+}
+
+
+double **allocateMatrix(int lines, int coluns)
+{
+	double **matrix;
+	
+	matrix = malloc(sizeof(double *) * lines);
+	if(matrix == NULL)
+		return NULL;
+	
+	for(int i=0; i<lines; i++){
+		matrix[i] = malloc(sizeof(double) * coluns);
+		if(matrix[i] == NULL){
+			for(int j=0; j<i; j++)
+				free(matrix[j]);
+			free(matrix);
+			return NULL;
+		}
+	}
+
+	return matrix;
 }
 
 

@@ -3,6 +3,7 @@
 
 char *convert(double number, int base);
 void menu(void);
-void gaussianJordanElimination(double m[][4], int n);
+void gaussianJordanElimination(double **m, int n);
+double **allocateMatrix(int lines, int coluns);
 
 #endif

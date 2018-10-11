@@ -115,11 +115,18 @@ TEST(ep1, convert_to_octal_decimal_number)
 */
 
 TEST(ep2, jordan_com_pivo_zero) {
-	double m[3][4] = {
+	double m_valores[3][4] = {
 		{2,-2,4,6},
 		{2,-2,1,-9},
 		{-1,1,-1,2}
 	};
+
+	double **m = allocateMatrix(3,4);
+	for(int i = 0; i<3; i++){
+		for(int j = 0; j<4; j++) {
+			m[i][j] = m_valores[i][j];
+		}
+	}
 
 	double m_resposta[3][4] = {
 		{2,0,0,-14},
@@ -128,10 +135,16 @@ TEST(ep2, jordan_com_pivo_zero) {
 	};
 
 	gaussianJordanElimination(m, 3);
-	
+
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			CHECK_EQUAL(m[i][j], m_resposta[i][j]);
 		}
 	}
+
+	
+	for (int i = 0; i < 3; i++) {
+		free(m[i]);
+	}
+	free(m);
 }
