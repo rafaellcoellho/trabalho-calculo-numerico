@@ -52,7 +52,40 @@ char *convert(double number, int base)
 }
 
 
+void gaussianJordanElimination(double m[][4], int n)
+{
+	int i, j, k; // Iteradores
 
+	for(i=0;i<n;i++){
+		if(m[i][i] == 0){
+			j=i+1;
+			while(j<n && m[i][j]==0)
+				j++;
+			if(j<n){
+				double aux;
+				for(k=0;k<n;k++){
+					aux = m[k][i];
+					m[k][i] = m[k][j];
+					m[k][j] = aux;
+				}
+			}else{
+				for(k=0;k<n;k++)
+					m[k][i]=0;
+			}
+		}
+		if(m[i][i]!=0){
+			for(j=0;j<n;j++){
+				if(j!=i){
+					double mult = -m[j][i]/m[i][i];
+					m[j][i] = 0;
+					for(k=i+1;k<=n;k++){
+						m[j][k] += mult*m[i][k];
+					}
+				}
+			}
+		}
+	}
+}
 
 
 void menu(void)

@@ -19,6 +19,19 @@ TEST_GROUP(ep1)
 	}
 };
 
+TEST_GROUP(ep2)
+{
+
+	void setup()
+	{
+	}
+
+	void teardown()
+	{
+	}
+};
+
+
 /*
 	Testes conversão binária
 */
@@ -91,4 +104,34 @@ TEST(ep1, convert_to_octal_decimal_number)
 {
 	array = convert(0.359375, 8);
 	STRCMP_EQUAL("0.27", array);
+}
+
+/*
+	Testes conversão Hexadecimal
+*/
+
+/*
+	Testes Método de Jordan
+*/
+
+TEST(ep2, jordan_com_pivo_zero) {
+	double m[3][4] = {
+		{2,-2,4,6},
+		{2,-2,1,-9},
+		{-1,1,-1,2}
+	};
+
+	double m_resposta[3][4] = {
+		{2,0,0,-14},
+		{0,-3,0,-15},
+		{0,0,0,0}
+	};
+
+	gaussianJordanElimination(m, 3);
+	
+	for(int i = 0; i<3; i++){
+		for(int j = 0; j<4; j++) {
+			CHECK_EQUAL(m[i][j], m_resposta[i][j]);
+		}
+	}
 }
