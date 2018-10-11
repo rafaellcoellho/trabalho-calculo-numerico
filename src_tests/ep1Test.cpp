@@ -206,9 +206,9 @@ TEST(ep2, jordan_disposicao_normal_variaveis) {
 
 	gaussianJordanElimination(m, 3, x);
 
-	CHECK_EQUAL(x[0], 1);
-	CHECK_EQUAL(x[1], 2);
-	CHECK_EQUAL(x[2], 3);
+	CHECK_EQUAL(x[0], 0);
+	CHECK_EQUAL(x[1], 1);
+	CHECK_EQUAL(x[2], 2);
 	
 	for (int i = 0; i < 3; i++) {
 		free(m[i]);
@@ -216,7 +216,7 @@ TEST(ep2, jordan_disposicao_normal_variaveis) {
 	free(m);
 }
 
-TEST(ep2, jordan_disposica0_alterada_variaveis) {
+TEST(ep2, jordan_disposicao_alterada_variaveis) {
 	double m_valores[3][4] = {
 		{ 2 ,-2 , 4 , 6 },
 		{ 2 ,-2 , 1 ,-9 },
@@ -234,12 +234,56 @@ TEST(ep2, jordan_disposica0_alterada_variaveis) {
 
 	gaussianJordanElimination(m, 3, x);
 
-	CHECK_EQUAL(x[0], 1);
-	CHECK_EQUAL(x[1], 3);
-	CHECK_EQUAL(x[2], 2);
+	CHECK_EQUAL(x[0], 0);
+	CHECK_EQUAL(x[1], 2);
+	CHECK_EQUAL(x[2], 1);
 	
 	for (int i = 0; i < 3; i++) {
 		free(m[i]);
 	}
 	free(m);
+}
+
+TEST(ep2, solucao_jordan_com_troca_colunas) {
+	double m_valores[3][4] = {
+		{ 2 ,-2 , 4 , 6 },
+		{ 2 ,-2 , 1 ,-9 },
+		{-1 , 1 ,-1 , 2 }
+	};
+
+	double **m = allocateMatrix(3,4);
+	for(int i = 0; i<3; i++){
+		for(int j = 0; j<4; j++) {
+			m[i][j] = m_valores[i][j];
+		}
+	}
+
+	double m_resposta[3][4] = {
+		{ 2 , 0 , 0 ,-14 },
+		{ 0 ,-3 , 0 ,-15 },
+		{ 0 , 0 , 0 ,  0 }
+	};
+	double **m_res = allocateMatrix(3,4);
+	for(int i = 0; i<3; i++){
+		for(int j = 0; j<4; j++) {
+			m_res[i][j] = m_resposta[i][j];
+		}
+	}
+
+	int x[3];
+	double result[3];
+
+	gaussianJordanElimination(m, 3, x);
+	solveJordanMatrix(m_res, 3, result);
+
+	DOUBLES_EQUAL(-7, result[x[0]], 0.001);
+	DOUBLES_EQUAL(0, result[x[1]], 0.001);
+	DOUBLES_EQUAL(5, result[x[2]], 0.001);
+	
+	for (int i = 0; i < 3; i++) {
+		free(m[i]);
+		free(m_res[i]);
+	}
+	free(m);
+	free(m_res);
 }

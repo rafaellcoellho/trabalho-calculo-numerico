@@ -55,7 +55,7 @@ char *convert(double number, int base)
 void gaussianJordanElimination(double **m, int n, int *x)
 {
 	int i, j, k; // Iteradores
-	x[0] = 1; x[1] = 2; x[2] = 3;
+	x[0] = 0; x[1] = 1; x[2] = 2;
 
 	for(i=0;i<n;i++){
 		if(m[i][i] == 0){
@@ -64,10 +64,10 @@ void gaussianJordanElimination(double **m, int n, int *x)
 				j++;
 			if(j<n){
 				double aux;
+				x[i] = j;
+				x[j] = i;
 				for(k=0;k<n;k++){
 					aux = m[k][i];
-					x[i] = j+1;
-					x[j] = i+1;
 					m[k][i] = m[k][j];
 					m[k][j] = aux;
 				}
@@ -87,6 +87,17 @@ void gaussianJordanElimination(double **m, int n, int *x)
 				}
 			}
 		}
+	}
+}
+
+
+void solveJordanMatrix(double **m, int n, double *result)
+{
+	for(int i = 0; i < n; i++) {
+		if((m[i][n] && m[i][i]) == 0)
+			result[i] = 0;
+		else 
+			result[i] = m[i][n] / m[i][i];
 	}
 }
 
@@ -115,47 +126,83 @@ double **allocateMatrix(int lines, int coluns)
 
 void menu(void)
 {
-	char raw_input[2];
-	int menu_option;
-	double number;
 
-	do{
-		printf("\n");
-		printf("C - Conversao\n");
-		printf("S - Sistema Linear\n");
-		printf("E - Equacao Algebrica\n");
-		printf("F - Finalizar\n");
-		printf("Escolha uma opcao: ");
-		scanf("%s", raw_input);	
+	double m_valores[3][4] = {
+		{ 2 ,-2 , 4 , 6 },
+		{ 2 ,-2 , 1 ,-9 },
+		{-1 , 1 ,-1 , 2 }
+	};
 
-		menu_option = toupper(raw_input[0]);
-
-		switch (menu_option){
-			case 'C':
-				printf("Digite um numero para ser convertido: ");
-				scanf("%lf", &number);
-				printf("\nBin: %s", convert(number, 2));
-				printf("\nOctal: %s", convert(number, 8));
-				printf("\nHex: %s", convert(number, 16));
-				printf("\n");
-				break;
-
-			case 'S':
-				printf("Digite o nome de um arquivo com o sistema linear: \n");
-				break;
-
-			case 'E':
-				printf("Insira uma equacao: \n");
-				break;
-		
-			case 'F':
-				printf("Saindo...\n");
-				break;
-		
-			default:
-				printf("\nOpcao invalida, tente novamente!\n");
-				break;
+	double **m = allocateMatrix(3,4);
+	for(int i = 0; i<3; i++){
+		for(int j = 0; j<4; j++) {
+			m[i][j] = m_valores[i][j];
 		}
+	}
 
-	} while (menu_option != 'F');
+	double m_resposta[3][4] = {
+		{ 2 , 0 , 0 ,-14 },
+		{ 0 ,-3 , 0 ,-15 },
+		{ 0 , 0 , 0 ,  0 }
+	};
+	double **m_res = allocateMatrix(3,4);
+	for(int i = 0; i<3; i++){
+		for(int j = 0; j<4; j++) {
+			m_res[i][j] = m_resposta[i][j];
+		}
+	}
+
+	int x[3];
+	double result[3];
+
+	gaussianJordanElimination(m, 3, x);
+	solveJordanMatrix(m_res, 3, result);
+
+
+	printf("AKI: %lf %lf %lf", result[0], result[1], result[2]);
+
+
+	// char raw_input[2];
+	// int menu_option;
+	// double number;
+
+	// do{
+	// 	printf("\n");
+	// 	printf("C - Conversao\n");
+	// 	printf("S - Sistema Linear\n");
+	// 	printf("E - Equacao Algebrica\n");
+	// 	printf("F - Finalizar\n");
+	// 	printf("Escolha uma opcao: ");
+	// 	scanf("%s", raw_input);	
+
+	// 	menu_option = toupper(raw_input[0]);
+
+	// 	switch (menu_option){
+	// 		case 'C':
+	// 			printf("Digite um numero para ser convertido: ");
+	// 			scanf("%lf", &number);
+	// 			printf("\nBin: %s", convert(number, 2));
+	// 			printf("\nOctal: %s", convert(number, 8));
+	// 			printf("\nHex: %s", convert(number, 16));
+	// 			printf("\n");
+	// 			break;
+
+	// 		case 'S':
+	// 			printf("Digite o nome de um arquivo com o sistema linear: \n");
+	// 			break;
+
+	// 		case 'E':
+	// 			printf("Insira uma equacao: \n");
+	// 			break;
+		
+	// 		case 'F':
+	// 			printf("Saindo...\n");
+	// 			break;
+		
+	// 		default:
+	// 			printf("\nOpcao invalida, tente novamente!\n");
+	// 			break;
+	// 	}
+
+	// } while (menu_option != 'F');
 }
