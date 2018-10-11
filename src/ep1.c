@@ -8,6 +8,8 @@
 
 char int_to_ascii[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
+
+// Corverte um numero do sistema de base 10 para outro
 char *convert(double number, int base)
 {
 	double num_int, num_frac;
@@ -48,6 +50,10 @@ char *convert(double number, int base)
 
 	return bin;
 }
+
+
+
+
 
 void menu(void)
 {
