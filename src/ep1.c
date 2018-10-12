@@ -6,10 +6,13 @@
 
 #include "ep1.h"
 
-char int_to_ascii[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+char int_to_ascii[16] = 
+	{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
+/******************************************************************
+ *	                        CONVERSÃO                             *
+ ******************************************************************/
 
-// Corverte um numero do sistema de base 10 para outro
 char *convert(double number, int base)
 {
 	double num_int, num_frac;
@@ -51,6 +54,9 @@ char *convert(double number, int base)
 	return bin;
 }
 
+/******************************************************************
+ *	                      METODO DE JORDAN                        *
+ ******************************************************************/
 
 void gaussianJordanElimination(double **m, int n, int *x)
 {
@@ -90,7 +96,6 @@ void gaussianJordanElimination(double **m, int n, int *x)
 	}
 }
 
-
 void solveJordanMatrix(double **m, int n, double *result)
 {
 	for(int i = 0; i < n; i++) {
@@ -100,7 +105,6 @@ void solveJordanMatrix(double **m, int n, double *result)
 			result[i] = m[i][n] / m[i][i];
 	}
 }
-
 
 double **allocateMatrix(long unsigned int lines, long unsigned int coluns)
 {
@@ -123,6 +127,15 @@ double **allocateMatrix(long unsigned int lines, long unsigned int coluns)
 	return matrix;
 }
 
+/******************************************************************
+ *	                    TEOREMA DE LAGRANGE                       *
+ ******************************************************************/
+
+
+
+/******************************************************************
+ *	                             MENU                             *
+ ******************************************************************/
 
 void menu(void)
 {
