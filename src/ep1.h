@@ -4,7 +4,7 @@
 char *convert(double number, int base);
 void menu(void);
 void gaussianJordanElimination(double **m, int n, int *x);
-double **allocateMatrix(int lines, int coluns);
+double **allocateMatrix(long unsigned int lines, long unsigned int coluns);
 void solveJordanMatrix(double **m, int n, double *result);
 
 #endif

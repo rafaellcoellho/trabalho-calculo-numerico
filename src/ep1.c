@@ -102,7 +102,7 @@ void solveJordanMatrix(double **m, int n, double *result)
 }
 
 
-double **allocateMatrix(int lines, int coluns)
+double **allocateMatrix(long unsigned int lines, long unsigned int coluns)
 {
 	double **matrix;
 	
@@ -110,10 +110,10 @@ double **allocateMatrix(int lines, int coluns)
 	if(matrix == NULL)
 		return NULL;
 	
-	for(int i=0; i<lines; i++){
+	for(long unsigned int i=0; i<lines; i++){
 		matrix[i] = malloc(sizeof(double) * coluns);
 		if(matrix[i] == NULL){
-			for(int j=0; j<i; j++)
+			for(long unsigned int j=0; j<i; j++)
 				free(matrix[j]);
 			free(matrix);
 			return NULL;
