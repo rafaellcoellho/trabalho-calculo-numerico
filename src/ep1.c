@@ -127,6 +127,58 @@ double **allocateMatrix(long unsigned int lines, long unsigned int coluns)
 	return matrix;
 }
 
+double **leArquivo(char *nome_arquivo, int *numero_de_linhas)
+{
+	FILE *arquivo;
+	double **matriz;
+
+	// Abre o arquivo
+	arquivo = fopen(nome_arquivo, "r");
+	if (arquivo == NULL) {
+		printf("Nao foi possivel abrir o arquivo!\n");
+		return NULL;
+	}
+
+	// Lê o número de variáveis
+	if (fscanf(arquivo, "%d", numero_de_linhas) == 0) {
+		printf("Problema ao ler o arquivo!\n");
+		return NULL;
+	}
+
+	// Aloca dinamicamente a matriz
+	matriz = allocateMatrix(*numero_de_linhas, *numero_de_linhas+1);
+	if(matriz == NULL){
+		printf("Impossivel alocar a matriz!\n");
+		return NULL;
+	}
+
+	// Lê a matriz aumentada
+	for (int i = 0; i < *numero_de_linhas; i++) {
+		for (int j = 0; j < *numero_de_linhas+1; j++) {
+			if (fscanf(arquivo, "%lf", &matriz[i][j]) == 0) {
+				printf("Problema ao ler o arquivo!\n");
+				return NULL;
+			}
+		}
+	}
+
+	// Fecha o arquivo
+	fclose(arquivo);
+
+	return matriz;
+}
+
+void mostraMatriz(double **matriz, int linhas, int colunas)
+{
+	printf("\n");
+	for(int i=0; i<linhas; i++){
+		for(int j=0; j<colunas; j++){
+			printf("%7.3lf", matriz[i][j]);
+		}
+		printf("\n");
+	}
+}
+
 /******************************************************************
  *	                    TEOREMA DE LAGRANGE                       *
  ******************************************************************/
@@ -139,10 +191,16 @@ double **allocateMatrix(long unsigned int lines, long unsigned int coluns)
 
 void menu(void)
 {
-
 	char raw_input[2];
 	int menu_option;
+
 	double number;
+
+	char nome_do_arquivo[100];
+	double **matriz;
+	int numero_de_linhas;
+	int ordem_das_raizes[3];
+	double resultado[3];
 
 	do{
 		printf("\n");
@@ -166,7 +224,17 @@ void menu(void)
 				break;
 
 			case 'S':
-				printf("Digite o nome de um arquivo com o sistema linear: \n");
+				printf("Digite o nome de um arquivo com o sistema linear: ");
+				scanf("%s", nome_do_arquivo);
+				matriz = leArquivo(nome_do_arquivo, &numero_de_linhas);
+				if (matriz != NULL) {
+					gaussianJordanElimination(matriz, numero_de_linhas, ordem_das_raizes);
+					mostraMatriz(matriz, numero_de_linhas, numero_de_linhas+1);
+					solveJordanMatrix(matriz, numero_de_linhas, resultado);
+					printf("\n");
+					for (int i = 0; i < numero_de_linhas; i++) 
+						printf("  x%d = %lf\n", i, resultado[ ordem_das_raizes[i] ]);
+				}
 				break;
 
 			case 'E':
