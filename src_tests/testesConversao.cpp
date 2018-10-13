@@ -97,3 +97,32 @@ TEST(conversao, numero_fracionario_para_octal)
 	Testes conversão Hexadecimal
 */
 
+TEST(conversao, zero_para_hexadecimal)
+{
+	string = convert(0, 16);
+	STRCMP_EQUAL("0.0", string);
+}
+
+TEST(conversao, numero_inteiro_para_hexadecimal)
+{
+	string = convert(142, 16);
+	STRCMP_EQUAL("8E.0", string);
+}
+
+TEST(conversao, numero_fracionario_zero_para_hexadecimal)
+{
+	string = convert(19.0, 16);
+	STRCMP_EQUAL("13.0", string);
+}
+
+TEST(conversao, numero_com_parte_fracionaria_para_hexadecimal)
+{
+	string = convert(216.4765625, 16);
+	STRCMP_EQUAL("D8.7A", string);
+}
+
+TEST(conversao, numero_fracionario_para_hexadecimal)
+{
+	string = convert(0.4765625, 16);
+	STRCMP_EQUAL("0.7A", string);
+}
