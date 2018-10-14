@@ -27,7 +27,7 @@ TEST(jordan, jordan_com_nenhum_pivo_zero) {
 		{ 3 ,-1 , 4 ,11 }
 	};
 
-	double **m = allocateMatrix(3,4);
+	double **m = alocaMatriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -42,7 +42,7 @@ TEST(jordan, jordan_com_nenhum_pivo_zero) {
 
 	int x[3];
 
-	gaussianJordanElimination(m, 3, x);
+	metodo_de_jordan(m, 3, x);
 
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
@@ -63,7 +63,7 @@ TEST(jordan, jordan_com_pivo_zero) {
 		{-1 , 1 ,-1 , 2 }
 	};
 
-	double **m = allocateMatrix(3,4);
+	double **m = alocaMatriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -78,7 +78,7 @@ TEST(jordan, jordan_com_pivo_zero) {
 
 	int x[3];
 
-	gaussianJordanElimination(m, 3, x);
+	metodo_de_jordan(m, 3, x);
 
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
@@ -100,7 +100,7 @@ TEST(jordan, checa_array_de_ordem_sem_troca_de_coluna) {
 		{ 3 ,-1 , 4 ,11 }
 	};
 
-	double **m = allocateMatrix(3,4);
+	double **m = alocaMatriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -109,7 +109,7 @@ TEST(jordan, checa_array_de_ordem_sem_troca_de_coluna) {
 
 	int x[3];
 
-	gaussianJordanElimination(m, 3, x);
+	metodo_de_jordan(m, 3, x);
 
 	CHECK_EQUAL(x[0], 0);
 	CHECK_EQUAL(x[1], 1);
@@ -128,7 +128,7 @@ TEST(jordan, checa_array_de_ordem_com_troca_de_coluna) {
 		{-1 , 1 ,-1 , 2 }
 	};
 
-	double **m = allocateMatrix(3,4);
+	double **m = alocaMatriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -137,7 +137,7 @@ TEST(jordan, checa_array_de_ordem_com_troca_de_coluna) {
 
 	int x[3];
 
-	gaussianJordanElimination(m, 3, x);
+	metodo_de_jordan(m, 3, x);
 
 	CHECK_EQUAL(x[0], 0);
 	CHECK_EQUAL(x[1], 2);
@@ -156,7 +156,7 @@ TEST(jordan, checa_solucao) {
 		{ 3 ,-1 , 4 ,11 }
 	};
 
-	double **m = allocateMatrix(3,4);
+	double **m = alocaMatriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -166,8 +166,8 @@ TEST(jordan, checa_solucao) {
 	int x[3];
 	double result[3];
 
-	gaussianJordanElimination(m, 3, x);
-	solveJordanMatrix(m, 3, result);
+	metodo_de_jordan(m, 3, x);
+	solucionar_matriz_jordan(m, 3, result);
 
 	DOUBLES_EQUAL(3, result[0], 0.001);
 	DOUBLES_EQUAL(2, result[1], 0.001);
@@ -186,7 +186,7 @@ TEST(jordan, checa_solucao_indexada_por_array_de_ordem) {
 		{-1 , 1 ,-1 , 2 }
 	};
 
-	double **m = allocateMatrix(3,4);
+	double **m = alocaMatriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -196,8 +196,8 @@ TEST(jordan, checa_solucao_indexada_por_array_de_ordem) {
 	int x[3];
 	double result[3];
 
-	gaussianJordanElimination(m, 3, x);
-	solveJordanMatrix(m, 3, result);
+	metodo_de_jordan(m, 3, x);
+	solucionar_matriz_jordan(m, 3, result);
 
 	DOUBLES_EQUAL(-7, result[x[0]], 0.001);
 	DOUBLES_EQUAL(0, result[x[1]], 0.001);

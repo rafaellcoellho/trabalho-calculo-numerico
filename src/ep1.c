@@ -6,89 +6,134 @@
 
 #include "ep1.h"
 
-char int_to_ascii[16] = 
-	{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
+// Array auxiliar para converter um inteiro para char,
+// o inteiro é usado como índice neste array e lhe é devolvido o char correspondente
+char int_para_ascii[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
 
 /******************************************************************
  *	                        CONVERSÃO                             *
  ******************************************************************/
 
-char *convert(double number, int base)
+/**
+ *	Converte um numero de base dez para outra base
+ *
+ *	@param numero_decimal - Numero de base dez a ser convertido
+ *	@param base_destino - numero que representa a base do sistema numerico destino
+ *	@return numero convertido para o sistema destino
+ */
+char *converter(double numero_decimal, int base_destino)
 {
-	double num_int, num_frac;
-	char *bin = calloc(50, sizeof(char));
-	int position = 0;
+	double parte_inteira, parte_fracionaria;
+	char *numero_convertido = calloc(50, sizeof(char));
+	int posicao = 0;
 	
 	// Separa a parte inteira da fracionária
-	num_frac = modf(number, &num_int);
+	parte_fracionaria = modf(numero_decimal, &parte_inteira);
 
-	if(num_int != 0){
+	// Calcula a parte inteira do resultado dividindo a parte inteira
+	// do numero pela base até ficar indivisivel pela base
+	if (parte_inteira != 0) {
 		char aux[30];
 
-		do{
-			aux[position++] = int_to_ascii[ (int)num_int % base ];
-			num_int = floor(num_int/base);
-		} while (num_int > 0);
+		do {
+			aux[posicao++] = int_para_ascii[ (int)parte_inteira % base_destino ];
+			parte_inteira = floor(parte_inteira/base_destino);
+		} while (parte_inteira > 0);
 
-		for(int i = 0; i < position; i++)
-			bin[i] = aux[position-i-1];
+		for(int i = 0; i < posicao; i++)
+			numero_convertido[i] = aux[posicao-i-1];
 	} else {
-		bin[position++] = '0';
+		numero_convertido[posicao++] = '0';
 	}
 
-	bin[position++] = '.';
+	numero_convertido[posicao++] = '.';
 
-	if(num_frac != 0){
-		double bit;
-		int max_digits = 20;
-		while (num_frac > 0 && max_digits > 0) {
-			num_frac *= base;
-			num_frac = modf(num_frac, &bit);
-			bin[position++] = int_to_ascii[ (int)bit ];
-			max_digits--;
+	// Calcula a parte fracionária do resultado mutiplicando a parte 
+	// fracionaria do numero pela base até a parte fracionaria ser zero
+	if (parte_fracionaria != 0) {
+		// Variavel auxiliar para armazenamento da parte inteira da multiplicacao
+		double resultado_inteiro;
+
+		// Limite de casas decimais para o numero convertido
+		int numero_max_digitos = 20; 	
+
+		while (parte_fracionaria > 0 && numero_max_digitos > 0) {
+			parte_fracionaria *= base_destino;
+			parte_fracionaria = modf(parte_fracionaria, &resultado_inteiro);
+			numero_convertido[posicao++] = int_para_ascii[ (int)resultado_inteiro ];
+			numero_max_digitos--;
 		}
 	} else {
-		bin[position] = '0';
+		numero_convertido[posicao] = '0';
 	}
 
-	return bin;
+	return numero_convertido;
 }
+
+
 
 /******************************************************************
  *	                      METODO DE JORDAN                        *
  ******************************************************************/
 
-void gaussianJordanElimination(double **m, int n, int *x)
+/**
+ *	Executa o metodo de jordan
+ *
+ *	@param m - Matriz Aumentada
+ *	@param ordem_matriz_coeficientes - ordem da matriz ao retirar coluna dos termos independentes
+ *	@param ordem_das_raizes - vetor que relaciona a posicao das raizes de acordo com as colunas
+ */ 
+void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_raizes)
 {
-	int i, j, k; // Iteradores
-	x[0] = 0; x[1] = 1; x[2] = 2;
+	// Iteradores
+	int i, j, k;
 
-	for(i=0;i<n;i++){
-		if(m[i][i] == 0){
-			j=i+1;
-			while(j<n && m[i][j]==0)
+	// Mapea a ordem das raizes de acordo com as colunas
+	int xi = 0;
+	while(xi < ordem_matriz_coeficientes) {
+		ordem_das_raizes[xi] = xi;
+		xi++;
+	}
+
+	// Percorre as linhas da matriz atribuindo pivo M(i,i)
+	for (i = 0; i < ordem_matriz_coeficientes; i++) {
+		// Se pivo igual a zero, procura uma coluna a direita para trocar
+		if(m[i][i] == 0) {
+			j = i + 1;
+			while (j < ordem_matriz_coeficientes && m[i][j]==0)
 				j++;
-			if(j<n){
+
+			// Realiza uma troca de colunas se uma coluna válida for encontrada
+			if (j < ordem_matriz_coeficientes) {
+				// A ordem das raizes sao rearranjadas
+				ordem_das_raizes[i] = j;
+				ordem_das_raizes[j] = i;
+
 				double aux;
-				x[i] = j;
-				x[j] = i;
-				for(k=0;k<n;k++){
+				for(k = 0; k < ordem_matriz_coeficientes; k++) {
 					aux = m[k][i];
 					m[k][i] = m[k][j];
 					m[k][j] = aux;
 				}
-			}else{
-				for(k=0;k<n;k++)
-					m[k][i]=0;
+			}
+			// Se uma coluna valida não for encontrada, atribui-se zero aos elementos da coluna do pivo
+			else {
+				for(k = 0; k < ordem_matriz_coeficientes; k++)
+					m[k][i] = 0;
 			}
 		}
-		if(m[i][i]!=0){
-			for(j=0;j<n;j++){
-				if(j!=i){
-					double mult = -m[j][i]/m[i][i];
+
+		// Se o pivo é diferente de zero é calculado o multiplicador
+		// e é feita as operações nas linhas abaixo e acima
+		if (m[i][i] != 0) {
+			for (j = 0; j < ordem_matriz_coeficientes; j++) {
+				if (j != i) {
+					double multiplicador = -m[j][i] / m[i][i];
 					m[j][i] = 0;
-					for(k=i+1;k<=n;k++){
-						m[j][k] += mult*m[i][k];
+					for (k = i+1; k <= ordem_matriz_coeficientes; k++) {
+						m[j][k] += multiplicador * m[i][k];
 					}
 				}
 			}
@@ -96,37 +141,85 @@ void gaussianJordanElimination(double **m, int n, int *x)
 	}
 }
 
-void solveJordanMatrix(double **m, int n, double *result)
+
+
+/**
+ *	Realiza operacao para o calculo das raizes do sistema linear na matriz de jordan
+ *
+ *	@param m - matriz aumentada
+ *	@param ordem_matriz_coeficientes - ordem da matriz ao retirar coluna dos termos independentes
+ *	@param raizes - vetor com as raizes do sistema
+ *	@return tipo do sistema linear: 0-Compativel Determinado / 1-Compativel Indeterminado / 2-Iconpativel
+ */
+int solucionar_matriz_jordan(double **m, int ordem_matriz_coeficientes, double *raizes)
 {
-	for(int i = 0; i < n; i++) {
-		if((m[i][n] && m[i][i]) == 0)
-			result[i] = 0;
+	int tipo = 0;
+
+	for(int i = 0; i < ordem_matriz_coeficientes; i++) {
+		// atribui a zero caso seja variavel livre
+		if((m[i][ordem_matriz_coeficientes] && m[i][i]) == 0) {
+			raizes[i] = 0;
+			tipo = 1;
+		}
+		// retorna incompativel caso coeficente seja zero e o termo independete nao
+		else if (m[i][ordem_matriz_coeficientes] != 0 && m[i][i] == 0) {
+			return 2;
+		}
+		// realiza calculo da raiz e adiciona na lista de raizes
 		else 
-			result[i] = m[i][n] / m[i][i];
+			raizes[i] = m[i][ordem_matriz_coeficientes] / m[i][i];
 	}
+
+	return tipo;
 }
 
-double **allocateMatrix(long unsigned int lines, long unsigned int coluns)
+
+
+/******************************************************************
+ *	                    TEOREMA DE LAGRANGE                       *
+ ******************************************************************/
+
+
+/******************************************************************
+ *     	                    UTILITARIOS                           *
+ ******************************************************************/
+
+/**
+ *	Aloca matriz na memoria
+ *
+ *	@param linhas - numero de linhas da matriz
+ *	@param colunas - numero de colunas da matriz
+ *	@return retorna a matriz caso consiga alocar, caso contrário retorna NULL
+ */
+double **alocaMatriz(long unsigned int linhas, long unsigned int colunas)
 {
-	double **matrix;
+	double **matriz;
 	
-	matrix = malloc(sizeof(double *) * lines);
-	if(matrix == NULL)
+	matriz = malloc(sizeof(double *) * linhas);
+	if (matriz == NULL)
 		return NULL;
 	
-	for(long unsigned int i=0; i<lines; i++){
-		matrix[i] = malloc(sizeof(double) * coluns);
-		if(matrix[i] == NULL){
+	for (long unsigned int i = 0; i < linhas; i++) {
+		matriz[i] = malloc(sizeof(double) * colunas);
+		if (matriz[i] == NULL) {
 			for(long unsigned int j=0; j<i; j++)
-				free(matrix[j]);
-			free(matrix);
+				free(matriz[j]);
+			free(matriz);
 			return NULL;
 		}
 	}
 
-	return matrix;
+	return matriz;
 }
 
+
+/**
+ *	Le arquivo e aloca seus valores em uma matriz
+ *
+ *	@param nome_arquivo - Nome do arquivo a partir da origem da aplicacao
+ *	@param numero_de_linhas - numero de linhas da matriz
+ *	@return matriz com o conteudo lido, se ocorrer erro ao ler o arquivo retorna NULL
+ */
 double **leArquivo(char *nome_arquivo, int *numero_de_linhas)
 {
 	FILE *arquivo;
@@ -146,7 +239,7 @@ double **leArquivo(char *nome_arquivo, int *numero_de_linhas)
 	}
 
 	// Aloca dinamicamente a matriz
-	matriz = allocateMatrix(*numero_de_linhas, *numero_de_linhas+1);
+	matriz = alocaMatriz(*numero_de_linhas, *numero_de_linhas+1);
 	if(matriz == NULL){
 		printf("Impossivel alocar a matriz!\n");
 		return NULL;
@@ -168,6 +261,15 @@ double **leArquivo(char *nome_arquivo, int *numero_de_linhas)
 	return matriz;
 }
 
+
+
+/**
+ *	Imprime matriz no console
+ *
+ *	matriz - matriz a ser mostrada no console
+ *	linhas - numero de linhas da matriz
+ *	colunas - numero de linhas da colunas
+ */
 void mostraMatriz(double **matriz, int linhas, int colunas)
 {
 	printf("\n");
@@ -179,10 +281,6 @@ void mostraMatriz(double **matriz, int linhas, int colunas)
 	}
 }
 
-/******************************************************************
- *	                    TEOREMA DE LAGRANGE                       *
- ******************************************************************/
-
 
 
 /******************************************************************
@@ -192,9 +290,9 @@ void mostraMatriz(double **matriz, int linhas, int colunas)
 void menu(void)
 {
 	char raw_input[2];
-	int menu_option;
+	int opcao_menu;
 
-	double number;
+	double numero;
 
 	char nome_do_arquivo[100];
 	double **matriz;
@@ -211,15 +309,15 @@ void menu(void)
 		printf("Escolha uma opcao: ");
 		scanf("%s", raw_input);	
 
-		menu_option = toupper(raw_input[0]);
+		opcao_menu = toupper(raw_input[0]);
 
-		switch (menu_option){
+		switch (opcao_menu){
 			case 'C':
 				printf("Digite um numero para ser convertido: ");
-				scanf("%lf", &number);
-				printf("\nBin: %s", convert(number, 2));
-				printf("\nOctal: %s", convert(number, 8));
-				printf("\nHex: %s", convert(number, 16));
+				scanf("%lf", &numero);
+				printf("\nBin: %s", converter(numero, 2));
+				printf("\nOctal: %s", converter(numero, 8));
+				printf("\nHex: %s", converter(numero, 16));
 				printf("\n");
 				break;
 
@@ -228,12 +326,18 @@ void menu(void)
 				scanf("%s", nome_do_arquivo);
 				matriz = leArquivo(nome_do_arquivo, &numero_de_linhas);
 				if (matriz != NULL) {
-					gaussianJordanElimination(matriz, numero_de_linhas, ordem_das_raizes);
+					metodo_de_jordan(matriz, numero_de_linhas, ordem_das_raizes);
 					mostraMatriz(matriz, numero_de_linhas, numero_de_linhas+1);
-					solveJordanMatrix(matriz, numero_de_linhas, resultado);
+					int tipo = solucionar_matriz_jordan(matriz, numero_de_linhas, resultado);
 					printf("\n");
-					for (int i = 0; i < numero_de_linhas; i++) 
-						printf("  x%d = %lf\n", i, resultado[ ordem_das_raizes[i] ]);
+					if (tipo == 2) {
+						printf("Sistema Linear Incompativel\n");
+					}
+					else {
+						printf("Sistema Linear %sDeterminado\n", tipo == 1 ? "IN":"");
+						for (int i = 0; i < numero_de_linhas; i++)
+							printf("  x%d = %lf\n", i, resultado[ ordem_das_raizes[i] ]);
+					}
 				}
 				break;
 
@@ -250,5 +354,5 @@ void menu(void)
 				break;
 		}
 
-	} while (menu_option != 'F');
+	} while (opcao_menu != 'F');
 }

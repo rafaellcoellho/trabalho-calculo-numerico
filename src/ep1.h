@@ -1,10 +1,12 @@
 #ifndef _H_EP1
 #define _H_EP1
 
-char *convert(double number, int base);
+char *converter(double numero_decimal, int base_destino);
+void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_raizes);
+int solucionar_matriz_jordan(double **m, int ordem_matriz_coeficientes, double *raizes);
+
+double **alocaMatriz(long unsigned int lines, long unsigned int coluns);
+
 void menu(void);
-void gaussianJordanElimination(double **m, int n, int *x);
-double **allocateMatrix(long unsigned int lines, long unsigned int coluns);
-void solveJordanMatrix(double **m, int n, double *result);
 
 #endif
