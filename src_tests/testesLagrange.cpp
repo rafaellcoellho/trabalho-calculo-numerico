@@ -21,7 +21,7 @@ TEST_GROUP(lagrange)
 */
 TEST(lagrange, limites_corretos_teorema_lagrange) {
     double polinomio[] = { 1, 5, -3, -7, -3 };
-    double ordem = 4;
+    int ordem = 4;
     double intervalo_positivo[2];
     double intervalo_negativo[2];
     
@@ -35,7 +35,7 @@ TEST(lagrange, limites_corretos_teorema_lagrange) {
 
 TEST(lagrange, raiz_aproximada_metodo_bissecao) {
     double polinomio[] = { 1, 5, -3, -7, -3 };
-    double ordem = 4;
+    int ordem = 4;
     double intervalo[2] = {0.0 , 4.0};
 
     double raiz_aproximada = metodo_da_bissecao(polinomio, ordem, intervalo);

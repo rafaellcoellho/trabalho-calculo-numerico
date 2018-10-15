@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
@@ -183,7 +184,8 @@ int soluciona_matriz_diagonal(double **m, int num_equacoes, double *raizes)
  *
  */
 void inverte_array(double *array, int n) {
-    int t, final = n - 1;
+    double t;
+		int final = n - 1;
 
     for (int c = 0; c < n/2; c++) {
         t = array[c];
@@ -246,8 +248,8 @@ double calcula_limite(double *polinomio, int grau) {
     b = 0;
     // Percorre os coeficiente e armazena em b, o maior negativo em modulo
     for (int i = 0; i < grau; i++) {
-        if (polinomio[i] < 0 && abs(polinomio[i]) > b) {
-            b = abs(polinomio[i]);
+        if (polinomio[i] < 0 && fabs(polinomio[i]) > b) {
+            b = fabs(polinomio[i]);
         }
     }
 
@@ -314,7 +316,7 @@ void teorema_de_lagrange(double *polinomio, int grau, double *intervalo_positivo
  */
 double metodo_da_bissecao(double *polinomio, int grau, double *intervalo) {
     double a = intervalo[0], b = intervalo[1];
-    double m, erro, f_a, f_m;
+    double m, f_a, f_m;
 
     for (int i = 0; i < 1000; i++) {
         m = (a+b) / 2;
@@ -404,7 +406,7 @@ double **le_arquivo(char *nome_arquivo, int *numero_de_linhas)
 	}
 
 	// Aloca dinamicamente a matriz
-	matriz = aloca_matriz(*numero_de_linhas, *numero_de_linhas+1);
+	matriz = aloca_matriz((uint32_t)*numero_de_linhas, (uint32_t)*numero_de_linhas+1);
 	if(matriz == NULL){
 		printf("Impossivel alocar a matriz!\n");
 		return NULL;
