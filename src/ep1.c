@@ -16,12 +16,13 @@ char int_para_ascii[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','
  *	                        CONVERSÃO                             *
  ******************************************************************/
 
-/**
- *	Converte um numero de base dez para outra base
+/*
+ * converter() - Converte um numero de base dez para outra base.
+ * @numero_decimal: Numero de base dez a ser convertido.
+ * @base_destino: Numero que representa a base do sistema numérico destino. 
+ *								 Ex: 2 (binário), 8 (octal), 16 (hexadecimal)
  *
- *	@param numero_decimal - Numero de base dez a ser convertido
- *	@param base_destino - numero que representa a base do sistema numerico destino
- *	@return numero convertido para o sistema destino
+ * Retorno: String do numero convertido para o sistema destino.
  */
 char *converter(double numero_decimal, int base_destino)
 {
@@ -33,7 +34,7 @@ char *converter(double numero_decimal, int base_destino)
 	parte_fracionaria = modf(numero_decimal, &parte_inteira);
 
 	// Calcula a parte inteira do resultado dividindo a parte inteira
-	// do numero pela base até ficar indivisivel pela base
+	// do numero pela base até ficar indivisível pela base
 	if (parte_inteira != 0) {
 		char aux[30];
 
@@ -50,10 +51,10 @@ char *converter(double numero_decimal, int base_destino)
 
 	numero_convertido[posicao++] = '.';
 
-	// Calcula a parte fracionária do resultado mutiplicando a parte 
+	// Calcula a parte fracionária do resultado multiplicando a parte 
 	// fracionaria do numero pela base até a parte fracionaria ser zero
 	if (parte_fracionaria != 0) {
-		// Variavel auxiliar para armazenamento da parte inteira da multiplicacao
+		// Variável auxiliar para armazenamento da parte inteira da multiplicação
 		double resultado_inteiro;
 
 		// Limite de casas decimais para o numero convertido
@@ -75,31 +76,31 @@ char *converter(double numero_decimal, int base_destino)
 
 
 /******************************************************************
- *	                      METODO DE JORDAN                        *
+ *	                      MÉTODO DE JORDAN                        *
  ******************************************************************/
 
-/**
- *	Executa o metodo de jordan
+/*
+ * metodo_de_jordan() - Executa o método de Jordan.
+ * @m: Matriz aumentada.
+ * @ordem_matriz_coeficientes: Numero de variáveis do sistema de equações.
+ * @ordem_das_raizes: Vetor que relaciona a posição das raízes de acordo com as colunas.
  *
- *	@param m - Matriz Aumentada
- *	@param ordem_matriz_coeficientes - ordem da matriz ao retirar coluna dos termos independentes
- *	@param ordem_das_raizes - vetor que relaciona a posicao das raizes de acordo com as colunas
- */ 
+ */
 void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_raizes)
 {
 	// Iteradores
 	int i, j, k;
 
-	// Mapea a ordem das raizes de acordo com as colunas
+	// Mapeia a ordem das raízes de acordo com as colunas
 	int xi = 0;
 	while(xi < ordem_matriz_coeficientes) {
 		ordem_das_raizes[xi] = xi;
 		xi++;
 	}
 
-	// Percorre as linhas da matriz atribuindo pivo M(i,i)
+	// Percorre as linhas da matriz atribuindo pivô M(i,i)
 	for (i = 0; i < ordem_matriz_coeficientes; i++) {
-		// Se pivo igual a zero, procura uma coluna a direita para trocar
+		// Se pivô igual a zero, procura uma coluna a direita para trocar
 		if(m[i][i] == 0) {
 			j = i + 1;
 			while (j < ordem_matriz_coeficientes && m[i][j]==0)
@@ -107,7 +108,7 @@ void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_
 
 			// Realiza uma troca de colunas se uma coluna válida for encontrada
 			if (j < ordem_matriz_coeficientes) {
-				// A ordem das raizes sao rearranjadas
+				// A ordem das raízes são rearranjadas
 				ordem_das_raizes[i] = j;
 				ordem_das_raizes[j] = i;
 
@@ -118,14 +119,14 @@ void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_
 					m[k][j] = aux;
 				}
 			}
-			// Se uma coluna valida não for encontrada, atribui-se zero aos elementos da coluna do pivo
+			// Se uma coluna valida não for encontrada, atribui-se zero aos elementos da coluna do pivô
 			else {
 				for(k = 0; k < ordem_matriz_coeficientes; k++)
 					m[k][i] = 0;
 			}
 		}
 
-		// Se o pivo é diferente de zero é calculado o multiplicador
+		// Se o pivô é diferente de zero é calculado o multiplicador
 		// e é feita as operações nas linhas abaixo e acima
 		if (m[i][i] != 0) {
 			for (j = 0; j < ordem_matriz_coeficientes; j++) {
@@ -141,31 +142,33 @@ void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_
 	}
 }
 
-
-
-/**
- *	Realiza operacao para o calculo das raizes do sistema linear na matriz de jordan
+/*
+ * solucionar_matriz_jordan() - Encontra as raízes de um sistema de equações após
+ *															ser diagonalizado pelo método de Jordan.
+ * @m: Matriz aumentada.
+ * @ordem_matriz_coeficientes: Numero de variáveis do sistema de equações.
+ * @raizes: Vetor com as raízes do sistema.
  *
- *	@param m - matriz aumentada
- *	@param ordem_matriz_coeficientes - ordem da matriz ao retirar coluna dos termos independentes
- *	@param raizes - vetor com as raizes do sistema
- *	@return tipo do sistema linear: 0-Compativel Determinado / 1-Compativel Indeterminado / 2-Iconpativel
+ * Retorno: Tipo do sistema linear.
+ *					0 - Compatível Determinado
+ *					1 - Compatível Indeterminado
+ *					2 - Incompatível.
  */
 int solucionar_matriz_jordan(double **m, int ordem_matriz_coeficientes, double *raizes)
 {
 	int tipo = 0;
 
 	for(int i = 0; i < ordem_matriz_coeficientes; i++) {
-		// atribui a zero caso seja variavel livre
+		// atribui a zero caso seja variável livre
 		if((m[i][ordem_matriz_coeficientes] && m[i][i]) == 0) {
 			raizes[i] = 0;
 			tipo = 1;
 		}
-		// retorna incompativel caso coeficente seja zero e o termo independete nao
+		// retorna incompatível caso coeficiente seja zero e o termo independente não
 		else if (m[i][ordem_matriz_coeficientes] != 0 && m[i][i] == 0) {
 			return 2;
 		}
-		// realiza calculo da raiz e adiciona na lista de raizes
+		// realiza calculo da raiz e adiciona na lista de raízes
 		else 
 			raizes[i] = m[i][ordem_matriz_coeficientes] / m[i][i];
 	}
@@ -173,16 +176,15 @@ int solucionar_matriz_jordan(double **m, int ordem_matriz_coeficientes, double *
 	return tipo;
 }
 
-
-
 /******************************************************************
- *	              TEOREMA DE LAGRANGE E BISSECAO                  *
+ *	              TEOREMA DE LAGRANGE E BISSEÇÃO                  *
  ******************************************************************/
 
-/**
- *   Inverte o conteudo do array
- *   @param array - lista a ser convertido
- *   @param n - numero de elementos de array
+/*
+ * inverter_array() - Inverte o conteuÚo do array.
+ * @array: Array a ser convertido.
+ * @n: Numero de elementos de array.
+ *
  */
 void inverter_array(double *array, int n) {
     int t, end = n - 1;
@@ -196,13 +198,12 @@ void inverter_array(double *array, int n) {
     }
 }
 
-
-/**
- *   Troca os sinais dos coeficientes que multiplicam 
- *   varivel elevado a potencia impar
- * 
- *   @param polinomio - array com os coeficientes do polinomio
- *   @param ordem - ordem do polinomio
+/*
+ * trocar_sinais_dos_coeficientes_An_com_n_impar() - Troca os sinais dos coeficientes que multiplicam 
+ *																									 variavel elevado a potencia impar.
+ * @polinomio: Array com os coeficientes do polinômio.
+ * @ordem: Grau do polinômio.
+ *
  */
 void trocar_sinais_dos_coeficientes_An_com_n_impar(double *polinomio, int ordem) {
     for (int i = 0; i <= ordem; i++) {
@@ -214,20 +215,29 @@ void trocar_sinais_dos_coeficientes_An_com_n_impar(double *polinomio, int ordem)
     }
 }
 
-
 /**
- *   Calcula limite da raiz de um polinomio de acordo com a 
+ *   Calcula limite da raiz de um polinômio de acordo com a 
  *   formula: L = 1 + raiz(n-k) de b/An
  * 
- *   @param polinomio - array com os coeficientes do polinomio
- *   @param ordem - ordem do polinomio
- *   @return limite da raiz do polinomio, caso nao exista raizes reais retorna -1
+ *   @param polinomio - array com os coeficientes do polinômio
+ *   @param ordem - ordem do polinômio
+ *   @return limite da raiz do polinômio, caso não exista raízes reais retorna -1
+ */
+
+/*
+ * calcular_limite() - Calcula limite da raiz de um polinômio de acordo com
+ * 										 formula: L = 1 + raiz(n-k) de b/An.
+ * @polinomio: Array com os coeficientes do polinômio.
+ * @ordem: Grau do polinômio.
+ *
+ * Retorno: Limite da raiz do polinômio, 
+ * 					caso não exista raízes reais retorna -1.
  */
 double calcular_limite(double *polinomio, int ordem) {
     double n, an, k, b;
     int multiplicadoPorUmNegativo = 0;
 
-    // Se An for negativo, multiplica-se o polinomio por -1
+    // Se An for negativo, multiplica-se o polinômio por -1
     if (polinomio[0] < 0) {
         for (int i = 0; i <= ordem; i++)
             polinomio[i] *= -1;
@@ -238,7 +248,7 @@ double calcular_limite(double *polinomio, int ordem) {
     an = polinomio[0];
     
     k = 0;
-    // Verifica primeiro indice se coeficiente for negativo
+    // Verifica primeiro índice se coeficiente for negativo
     for (int i = 0; i < ordem; i++) {
         if (polinomio[i] < 0) {
             k = ordem - i;
@@ -254,13 +264,13 @@ double calcular_limite(double *polinomio, int ordem) {
         }
     }
 
-    // Desfaz a multiplicao por -1 se esta foi feita previamente
+    // Desfaz a multiplição por -1 se esta foi feita previamente
     if (multiplicadoPorUmNegativo == 1) {
         for (int i = 0; i <= ordem; i++)
             polinomio[i] *= -1;
     }
 
-	// Caso nao exista raizes reais retorna -1
+	// Caso não exista raízes reais retorna -1
     if ((k && b) == 0)
         return -1;
 
@@ -268,36 +278,35 @@ double calcular_limite(double *polinomio, int ordem) {
     return 1 + pow(b/an, 1.0/(n-k));
 }
 
-
-/**
- *   Aplica em um polinomio o teorema de lagrange retornando os intervalos
- *   das raizes positivas e negativas do polinomio
- * 
- *   @param polinomio - array com os coeficientes do polinomio
- *   @param ordem - ordem do polinomio
- *   @param intervalo_positivo - array onde ira ser guardado o intervalo das raizes positivas
- *   @param intervalo_negativo - array onde ira ser guardado o intervalo das raizes negativas
+/*
+ * aplicar_teorema_de_langrange() - Encontra o intervalo das raízes reais positivas 
+ * 																	e negativas de um polinômio.
+ * @polinomio: Array com os coeficientes do polinômio.
+ * @ordem: Grau do polinômio.
+ * @intervalo_positivo: Array para o intervalo das raízes positivas.
+ * @intervalo_negativo: Array para o intervalo das raízes negativas.
+ *
  */
 void aplicar_teorema_de_langrange(double *polinomio, int ordem, double *intervalo_positivo, double *intervalo_negativo) {
     double l, l1, l2, l3;
     
     l = calcular_limite(polinomio, ordem);
 
-    // Inverte coeficientes do polinomio para encontrar p1
+    // Inverte coeficientes do polinômio para encontrar p1
     inverter_array(polinomio, ordem+1);
     l1 = calcular_limite(polinomio, ordem);
 
-    // Desinverte os coeficentes para retornar ao polinomio original e 
+    // Retorna os coeficientes a ordem polinômio original e 
     // inverte os sinais para encontrar p2
     inverter_array(polinomio, ordem+1);
     trocar_sinais_dos_coeficientes_An_com_n_impar(polinomio, ordem);
     l2 = calcular_limite(polinomio, ordem);
 
-    // Inverte os coefiecientes para encontra p3
+    // Inverte os coeficientes para encontra p3
     inverter_array(polinomio, ordem+1);
     l3 = calcular_limite(polinomio, ordem);
 
-    // Devolvendo o polinomio ao estado inicial
+    // Devolvendo o polinômio ao estado inicial
     inverter_array(polinomio, ordem+1);
     trocar_sinais_dos_coeficientes_An_com_n_impar(polinomio, ordem);
     
@@ -307,15 +316,14 @@ void aplicar_teorema_de_langrange(double *polinomio, int ordem, double *interval
     intervalo_negativo[1] = -(1.0/l3);
 }
 
-
-/**
- *   Aplica o metodo da bissecao em um polinomio
- *   dado um intervalo e é retornado uma raiz aproximada
- * 
- *   @param polinomio - array com os coeficientes do polinomio
- *   @param ordem - ordem do polinomio
- *   @param intervalo - intervalo para calculo do metodo
- *   @return raiz aproximada do polinomio contida no intervalo
+/*
+ * aplicar_metodo_da_bissecao() - Aplica o método da bisseção em um polinômio
+ * 										 						dado um intervalo e é retornado uma raiz aproximada.
+ * @polinomio: Array com os coeficientes do polinômio.
+ * @ordem: Grau do polinômio.
+ * @intervalo: Intervalo para calculo do método.
+ *
+ * Retorno: Raiz aproximada do polinômio contida no intervalo.
  */
 double aplicar_metodo_da_bissecao(double *polinomio, int ordem, double *intervalo) {
     double a = intervalo[0], b = intervalo[1];
@@ -353,12 +361,13 @@ double aplicar_metodo_da_bissecao(double *polinomio, int ordem, double *interval
  *     	                    UTILITARIOS                           *
  ******************************************************************/
 
-/**
- *	Aloca matriz na memoria
+/*
+ * aloca_matriz() - Aloca matriz na memoria.
+ * @linhas: Numero de linhas da matriz.
+ * @colunas: Numero de colunas da matriz.
  *
- *	@param linhas - numero de linhas da matriz
- *	@param colunas - numero de colunas da matriz
- *	@return retorna a matriz caso consiga alocar, caso contrário retorna NULL
+ * Retorno: Retorna a matriz caso consiga alocar, 
+ * 					caso contrário retorna NULL.
  */
 double **aloca_matriz(long unsigned int linhas, long unsigned int colunas)
 {
@@ -381,13 +390,13 @@ double **aloca_matriz(long unsigned int linhas, long unsigned int colunas)
 	return matriz;
 }
 
-
-/**
- *	Le arquivo e aloca seus valores em uma matriz
+/*
+ * le_arquivo() - Lê arquivo e aloca seus valores em uma matriz.
+ * @nome_arquivo: Nome do arquivo.
+ * @numero_de_linhas: Preenche com o nome de linhas da matriz.
  *
- *	@param nome_arquivo - Nome do arquivo a partir da origem da aplicacao
- *	@param numero_de_linhas - numero de linhas da matriz
- *	@return matriz com o conteudo lido, se ocorrer erro ao ler o arquivo retorna NULL
+ * Retorno: Retorna a matriz caso consiga alocar, 
+ * 					caso contrário retorna NULL.
  */
 double **le_arquivo(char *nome_arquivo, int *numero_de_linhas)
 {
@@ -430,14 +439,12 @@ double **le_arquivo(char *nome_arquivo, int *numero_de_linhas)
 	return matriz;
 }
 
-
-
-/**
- *	Imprime matriz no console
+/*
+ * mostra_matriz() - Imprime matriz no console.
+ * @matriz: Matriz a ser mostrada no console.
+ * @linhas: Numero de linhas da matriz.
+ * @colunas: Numero de linhas da colunas.
  *
- *	matriz - matriz a ser mostrada no console
- *	linhas - numero de linhas da matriz
- *	colunas - numero de linhas da colunas
  */
 void mostra_matriz(double **matriz, int linhas, int colunas)
 {
