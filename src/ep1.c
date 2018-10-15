@@ -335,6 +335,35 @@ void teorema_de_lagrange(double *polinomio, int grau, double *intervalo_positivo
 }
 
 /*
+ * teorema_de_bolzano() - Seja uma função contínua considerando dois pontos a e b,
+ *                        se f(a)f(b) < 0, então a função tem um número ímpar de 
+ * 											  raizes entre a e b.
+ * @polinomio: Array com os coeficientes do polinômio.
+ * @grau: Grau do polinômio.
+ * @a: Ponto a.
+ * @b: Ponto b.
+ *
+ * Retorno: 0 - Número ímpar de raízes
+ * 					1 - Número par de raízes no intervalo
+ */
+int teorema_de_bolzano(double *polinomio, int grau, double a, double b) {
+	double f_a, f_b;
+
+	f_a = 0;
+	f_b = 0;
+	// Calcula p(a) e p(b)
+	for (int xi = grau; xi >= 0; xi--) {
+		f_a += polinomio[grau - xi] * pow(a, xi);
+		f_b += polinomio[grau - xi] * pow(b, xi);
+	}
+
+	if( (f_a*f_b) < 0)
+		return 0;
+	else
+		return 1;
+}
+
+/*
  * metodo_da_bissecao() - Aplica o método da bisseção em um polinômio
  * 										 						dado um intervalo e é retornado uma raiz aproximada.
  * @polinomio: Array com os coeficientes do polinômio.
@@ -373,7 +402,6 @@ double metodo_da_bissecao(double *polinomio, int grau, double *intervalo) {
 	// Ao passar 1000 iterações é retornado m sendo este uma raiz aproximada
 	return m;
 }
-
 
 /******************************************************************
  *     	                    UTILITARIOS                           *

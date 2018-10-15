@@ -55,16 +55,6 @@ TEST(lagrange, limites_corretos_teorema_lagrange) {
     DOUBLES_EQUAL(-0.300000, intervalo_negativo[1], 0.000001);
 }
 
-
-TEST(lagrange, raiz_aproximada_metodo_bissecao) {
-    double polinomio[] = { 1, 5, -3, -7, -3 };
-    int ordem = 4;
-    double intervalo[2] = {0.0 , 4.0};
-
-    double raiz_aproximada = metodo_da_bissecao(polinomio, ordem, intervalo);
-    DOUBLES_EQUAL(1.442585, raiz_aproximada, 0.000001);
-}
-
 TEST(lagrange, limites_incorretos_teorema_lagrange) {
     double polinomio[] = { 1, 5, 3, 7, 3 };
     int ordem = 4;
@@ -74,4 +64,27 @@ TEST(lagrange, limites_incorretos_teorema_lagrange) {
     teorema_de_lagrange(polinomio, ordem, intervalo_positivo, intervalo_negativo);
     DOUBLES_EQUAL(0, intervalo_positivo[0], 0.000001);
     DOUBLES_EQUAL(0, intervalo_positivo[1], 0.000001);
+}
+
+TEST(lagrange, teorema_de_bolzano_intervalo_com_raiz) {
+    double polinomio[] = { 1, 5, -3, -7, -3 };
+    int ordem = 4;
+    
+    CHECK_EQUAL(0 ,teorema_de_bolzano(polinomio, ordem, 1, 2));
+}
+
+TEST(lagrange, teorema_de_bolzano_intervalo_sem_raiz) {
+    double polinomio[] = { 1, 5, -3, -7, -3 };
+    int ordem = 4;
+    
+    CHECK_EQUAL(1 ,teorema_de_bolzano(polinomio, ordem, 2, 3));
+}
+
+TEST(lagrange, raiz_aproximada_metodo_bissecao) {
+    double polinomio[] = { 1, 5, -3, -7, -3 };
+    int ordem = 4;
+    double intervalo[2] = {0.0 , 4.0};
+
+    double raiz_aproximada = metodo_da_bissecao(polinomio, ordem, intervalo);
+    DOUBLES_EQUAL(1.442585, raiz_aproximada, 0.000001);
 }

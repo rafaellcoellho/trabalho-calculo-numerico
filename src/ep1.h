@@ -6,6 +6,7 @@ void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_
 int soluciona_matriz_diagonal(double **m, int ordem_matriz_coeficientes, double *raizes);
 
 void teorema_de_lagrange(double *polinomio, int ordem, double *intervalo_positivo, double *intervalo_negativo);
+int teorema_de_bolzano(double *polinomio, int grau, double a, double b);
 double metodo_da_bissecao(double *polinomio, int ordem, double *intervalo);
 
 double **aloca_matriz(long unsigned int lines, long unsigned int coluns);
