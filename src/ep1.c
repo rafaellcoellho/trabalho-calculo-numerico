@@ -312,11 +312,26 @@ void teorema_de_lagrange(double *polinomio, int grau, double *intervalo_positivo
 	// Devolvendo o polinômio ao estado inicial
 	inverte_array(polinomio, grau+1);
 	inverte_sinal(polinomio, grau);
-	
-	intervalo_positivo[0] = 1.0/l1;
-	intervalo_positivo[1] = l;
-	intervalo_negativo[0] = -l2;
-	intervalo_negativo[1] = -(1.0/l3);
+
+	if (l1 != -1) 
+		intervalo_positivo[0] = 1.0/l1;
+	else 
+		intervalo_positivo[0] = 0;
+
+	if (l != -1) 
+		intervalo_positivo[1] = l;
+	else 
+		intervalo_positivo[1] = 0;
+
+	if (l2 != -1) 
+		intervalo_negativo[0] = -l2;
+	else 
+		intervalo_negativo[0] = 0;
+
+	if (l3 != -1) 
+		intervalo_negativo[1] = -(1.0/l3);
+	else 
+		intervalo_negativo[1] = 0;
 }
 
 /*

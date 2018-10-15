@@ -64,3 +64,14 @@ TEST(lagrange, raiz_aproximada_metodo_bissecao) {
     double raiz_aproximada = metodo_da_bissecao(polinomio, ordem, intervalo);
     DOUBLES_EQUAL(1.442585, raiz_aproximada, 0.000001);
 }
+
+TEST(lagrange, limites_incorretos_teorema_lagrange) {
+    double polinomio[] = { 1, 5, 3, 7, 3 };
+    int ordem = 4;
+    double intervalo_positivo[2];
+    double intervalo_negativo[2];
+    
+    teorema_de_lagrange(polinomio, ordem, intervalo_positivo, intervalo_negativo);
+    DOUBLES_EQUAL(0, intervalo_positivo[0], 0.000001);
+    DOUBLES_EQUAL(0, intervalo_positivo[1], 0.000001);
+}
