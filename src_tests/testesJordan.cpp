@@ -27,7 +27,7 @@ TEST(jordan, jordan_com_nenhum_pivo_zero) {
 		{ 3 ,-1 , 4 ,11 }
 	};
 
-	double **m = alocaMatriz(3,4);
+	double **m = aloca_matriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -63,7 +63,7 @@ TEST(jordan, jordan_com_pivo_zero) {
 		{-1 , 1 ,-1 , 2 }
 	};
 
-	double **m = alocaMatriz(3,4);
+	double **m = aloca_matriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -100,7 +100,7 @@ TEST(jordan, checa_array_de_ordem_sem_troca_de_coluna) {
 		{ 3 ,-1 , 4 ,11 }
 	};
 
-	double **m = alocaMatriz(3,4);
+	double **m = aloca_matriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -128,7 +128,7 @@ TEST(jordan, checa_array_de_ordem_com_troca_de_coluna) {
 		{-1 , 1 ,-1 , 2 }
 	};
 
-	double **m = alocaMatriz(3,4);
+	double **m = aloca_matriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -156,7 +156,7 @@ TEST(jordan, checa_solucao) {
 		{ 3 ,-1 , 4 ,11 }
 	};
 
-	double **m = alocaMatriz(3,4);
+	double **m = aloca_matriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
@@ -186,7 +186,7 @@ TEST(jordan, checa_solucao_indexada_por_array_de_ordem) {
 		{-1 , 1 ,-1 , 2 }
 	};
 
-	double **m = alocaMatriz(3,4);
+	double **m = aloca_matriz(3,4);
 	for(int i = 0; i<3; i++){
 		for(int j = 0; j<4; j++) {
 			m[i][j] = m_valores[i][j];
