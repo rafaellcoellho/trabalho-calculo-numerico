@@ -19,6 +19,29 @@ TEST_GROUP(lagrange)
 /*
     Testes do teorema de lagrange e do metodo da bissecao
 */
+
+TEST(lagrange, intervalo_positivo_de_raizes) {
+    double polinomio[] = { 1, -5, -7, 29, 30 };
+    int ordem = 4;
+    double intervalo_positivo[2];
+    double intervalo_negativo[2];
+    
+    teorema_de_lagrange(polinomio, ordem, intervalo_positivo, intervalo_negativo);
+    DOUBLES_EQUAL(0.6743, intervalo_positivo[0], 0.0001);
+    DOUBLES_EQUAL(8, intervalo_positivo[1], 0.0001);
+}
+
+TEST(lagrange, intervalo_negativo_de_raizes) {
+    double polinomio[] = { 1, -5, -7, 29, 30 };
+    int ordem = 4;
+    double intervalo_positivo[2];
+    double intervalo_negativo[2];
+    
+    teorema_de_lagrange(polinomio, ordem, intervalo_positivo, intervalo_negativo);
+    DOUBLES_EQUAL(-6.3852, intervalo_negativo[0], 0.0001);
+    DOUBLES_EQUAL(-0.5085, intervalo_negativo[1], 0.0001);
+}
+
 TEST(lagrange, limites_corretos_teorema_lagrange) {
     double polinomio[] = { 1, 5, -3, -7, -3 };
     int ordem = 4;
