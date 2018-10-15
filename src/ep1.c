@@ -242,9 +242,9 @@ double calcula_limite(double *polinomio, int grau) {
 
 	// Se An for negativo, multiplica-se o polinômio por -1
 	if (polinomio[0] < 0) {
-			for (int i = 0; i <= grau; i++)
-					polinomio[i] *= -1;
-			sinal_invertido = 1;
+		for (int i = 0; i <= grau; i++)
+				polinomio[i] *= -1;
+		sinal_invertido = 1;
 	}
 
 	n = grau;
@@ -253,29 +253,29 @@ double calcula_limite(double *polinomio, int grau) {
 	k = 0;
 	// Verifica primeiro índice se coeficiente for negativo
 	for (int i = 0; i < grau; i++) {
-			if (polinomio[i] < 0) {
-					k = grau - i;
-					break;
-			}
+		if (polinomio[i] < 0) {
+				k = grau - i;
+				break;
+		}
 	}
 
 	b = 0;
 	// Percorre os coeficiente e armazena em b, o maior negativo em modulo
 	for (int i = 0; i < grau; i++) {
-			if (polinomio[i] < 0 && fabs(polinomio[i]) > b) {
-					b = fabs(polinomio[i]);
-			}
+		if (polinomio[i] < 0 && fabs(polinomio[i]) > b) {
+				b = fabs(polinomio[i]);
+		}
 	}
 
 	// Desfaz a multiplição por -1 se esta foi feita previamente
 	if (sinal_invertido == 1) {
-			for (int i = 0; i <= grau; i++)
-					polinomio[i] *= -1;
+		for (int i = 0; i <= grau; i++)
+				polinomio[i] *= -1;
 	}
 
 	// Caso não exista raízes reais retorna -1
-	if ((k && b) == 0)
-			return -1;
+	if (k == 0 && b == 0)
+		return -1;
 
 	// Aplica a formula e retorna seu valor
 	return 1 + pow(b/an, 1.0/(n-k));
