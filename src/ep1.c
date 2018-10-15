@@ -521,6 +521,13 @@ void menu(void)
 	int numero_de_linhas;
 	int ordem_das_raizes[3];
 	double resultado[3];
+	
+	int grau_da_eq;
+	double *polinomio;
+	double intervalo_positivo[2];
+	double intervalo_negativo[2];
+	double intervalo[2];
+	double raiz_aproximada;
 
 	do{
 		printf("\n");
@@ -535,7 +542,7 @@ void menu(void)
 
 		switch (opcao_menu){
 			case 'C':
-				printf("Digite um numero para ser convertido: ");
+				printf("\nDigite um numero para ser convertido: ");
 				scanf("%lf", &numero);
 				printf("\nBin: %s", converte(numero, 2));
 				printf("\nOctal: %s", converte(numero, 8));
@@ -544,7 +551,7 @@ void menu(void)
 				break;
 
 			case 'S':
-				printf("Digite o nome de um arquivo com o sistema linear: ");
+				printf("\nDigite o nome de um arquivo com o sistema linear: ");
 				scanf("%s", nome_do_arquivo);
 				matriz = le_arquivo(nome_do_arquivo, &numero_de_linhas);
 				if (matriz != NULL) {
@@ -564,7 +571,41 @@ void menu(void)
 				break;
 
 			case 'E':
-				printf("Insira uma equacao: \n");
+				printf("\nInsira o grau da equacao: ");
+				scanf("%d", &grau_da_eq);
+				polinomio = malloc(sizeof(double) * (grau_da_eq+1) );
+				if (polinomio != NULL) {
+					for (int i = 0; i < grau_da_eq; i++){
+						printf("Coeficiente %d: ", grau_da_eq-i);
+						scanf("%lf", &polinomio[i]);
+					}
+					printf("Termo independente: ");
+					scanf("%lf", &polinomio[grau_da_eq]);
+					if (polinomio[0] > 0 && polinomio[grau_da_eq] != 0) {
+						teorema_de_lagrange(polinomio, grau_da_eq, intervalo_positivo, intervalo_negativo);
+						printf("\nLimite superior positivo: %lf", intervalo_positivo[1]);
+						printf("\nLimite inferior positivo: %lf", intervalo_positivo[0]);
+						printf("\nLimite superior negativo: %lf", intervalo_negativo[1]);
+						printf("\nLimite inferior negativo: %lf", intervalo_negativo[0]);
+						
+						printf("\n\nInforme um intervalo.\na: ");
+						scanf("%lf", &intervalo[0]);
+						printf("b: ");
+						scanf("%lf", &intervalo[1]);
+						int num_raizes = teorema_de_bolzano(polinomio, grau_da_eq, intervalo);
+						if(num_raizes) {
+							printf("\nO numero de raizes no intervalo eh par!\n");
+						} else {
+							raiz_aproximada = metodo_da_bissecao(polinomio, grau_da_eq, intervalo);
+							printf("\nRaiz aproximada do polinomio: %lf\n", raiz_aproximada);
+						}
+					} else {
+						printf("\nSistema invalido!\n");
+					}
+					free(polinomio);
+				} else {
+					printf("Falta de memória!\n");
+				}
 				break;
 		
 			case 'F':
