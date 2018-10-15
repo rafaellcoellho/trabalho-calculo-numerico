@@ -177,7 +177,7 @@ int soluciona_matriz_diagonal(double **m, int num_equacoes, double *raizes)
  ******************************************************************/
 
 /*
- * inverte_array() - Inverte o conteuÚo do array.
+ * inverte_array() - Inverte o conteúdo do array.
  * @array: Array a ser convertido.
  * @n: Numero de elementos de array.
  *
@@ -198,63 +198,54 @@ void inverte_array(double *array, int n) {
  * inverte_sinal() - Troca os sinais dos coeficientes que multiplicam 
  *																									 variavel elevado a potencia impar.
  * @polinomio: Array com os coeficientes do polinômio.
- * @ordem: Grau do polinômio.
+ * @grau: Grau do polinômio.
  *
  */
-void inverte_sinal(double *polinomio, int ordem) {
-    for (int i = 0; i <= ordem; i++) {
-        // Se a ordem - indice é impar, significa que n é impar
+void inverte_sinal(double *polinomio, int grau) {
+    for (int i = 0; i <= grau; i++) {
+        // Se a grau - indice é impar, significa que n é impar
         // Ex.: 4-0 = 0, logo nao inverte / 4-1 = 3, logo inverte o sinal
-        if (!((ordem - i) % 2 == 0)) {
+        if (!((grau - i) % 2 == 0)) {
             polinomio[i] *= -1;
         }
     }
 }
 
-/**
- *   Calcula limite da raiz de um polinômio de acordo com a 
- *   formula: L = 1 + raiz(n-k) de b/An
- * 
- *   @param polinomio - array com os coeficientes do polinômio
- *   @param ordem - ordem do polinômio
- *   @return limite da raiz do polinômio, caso não exista raízes reais retorna -1
- */
-
 /*
  * calcula_limite() - Calcula limite da raiz de um polinômio de acordo com
  * 										 formula: L = 1 + raiz(n-k) de b/An.
  * @polinomio: Array com os coeficientes do polinômio.
- * @ordem: Grau do polinômio.
+ * @grau: Grau do polinômio.
  *
  * Retorno: Limite da raiz do polinômio, 
  * 					caso não exista raízes reais retorna -1.
  */
-double calcula_limite(double *polinomio, int ordem) {
+double calcula_limite(double *polinomio, int grau) {
     double n, an, k, b;
     int sinal_invertido = 0;
 
     // Se An for negativo, multiplica-se o polinômio por -1
     if (polinomio[0] < 0) {
-        for (int i = 0; i <= ordem; i++)
+        for (int i = 0; i <= grau; i++)
             polinomio[i] *= -1;
         sinal_invertido = 1;
     }
 
-    n = ordem;
+    n = grau;
     an = polinomio[0];
     
     k = 0;
     // Verifica primeiro índice se coeficiente for negativo
-    for (int i = 0; i < ordem; i++) {
+    for (int i = 0; i < grau; i++) {
         if (polinomio[i] < 0) {
-            k = ordem - i;
+            k = grau - i;
             break;
         }
     }
 
     b = 0;
     // Percorre os coeficiente e armazena em b, o maior negativo em modulo
-    for (int i = 0; i < ordem; i++) {
+    for (int i = 0; i < grau; i++) {
         if (polinomio[i] < 0 && abs(polinomio[i]) > b) {
             b = abs(polinomio[i]);
         }
@@ -262,7 +253,7 @@ double calcula_limite(double *polinomio, int ordem) {
 
     // Desfaz a multiplição por -1 se esta foi feita previamente
     if (sinal_invertido == 1) {
-        for (int i = 0; i <= ordem; i++)
+        for (int i = 0; i <= grau; i++)
             polinomio[i] *= -1;
     }
 
@@ -278,33 +269,33 @@ double calcula_limite(double *polinomio, int ordem) {
  * teorema_de_lagrange() - Encontra o intervalo das raízes reais positivas 
  * 																	e negativas de um polinômio.
  * @polinomio: Array com os coeficientes do polinômio.
- * @ordem: Grau do polinômio.
+ * @grau: Grau do polinômio.
  * @intervalo_positivo: Array para o intervalo das raízes positivas.
  * @intervalo_negativo: Array para o intervalo das raízes negativas.
  *
  */
-void teorema_de_lagrange(double *polinomio, int ordem, double *intervalo_positivo, double *intervalo_negativo) {
+void teorema_de_lagrange(double *polinomio, int grau, double *intervalo_positivo, double *intervalo_negativo) {
     double l, l1, l2, l3;
     
-    l = calcula_limite(polinomio, ordem);
+    l = calcula_limite(polinomio, grau);
 
     // Inverte coeficientes do polinômio para encontrar p1
-    inverte_array(polinomio, ordem+1);
-    l1 = calcula_limite(polinomio, ordem);
+    inverte_array(polinomio, grau+1);
+    l1 = calcula_limite(polinomio, grau);
 
-    // Retorna os coeficientes a ordem polinômio original e 
+    // Retorna os coeficientes a grau polinômio original e 
     // inverte os sinais para encontrar p2
-    inverte_array(polinomio, ordem+1);
-    inverte_sinal(polinomio, ordem);
-    l2 = calcula_limite(polinomio, ordem);
+    inverte_array(polinomio, grau+1);
+    inverte_sinal(polinomio, grau);
+    l2 = calcula_limite(polinomio, grau);
 
     // Inverte os coeficientes para encontra p3
-    inverte_array(polinomio, ordem+1);
-    l3 = calcula_limite(polinomio, ordem);
+    inverte_array(polinomio, grau+1);
+    l3 = calcula_limite(polinomio, grau);
 
     // Devolvendo o polinômio ao estado inicial
-    inverte_array(polinomio, ordem+1);
-    inverte_sinal(polinomio, ordem);
+    inverte_array(polinomio, grau+1);
+    inverte_sinal(polinomio, grau);
     
     intervalo_positivo[0] = 1.0/l1;
     intervalo_positivo[1] = l;
@@ -316,12 +307,12 @@ void teorema_de_lagrange(double *polinomio, int ordem, double *intervalo_positiv
  * metodo_da_bissecao() - Aplica o método da bisseção em um polinômio
  * 										 						dado um intervalo e é retornado uma raiz aproximada.
  * @polinomio: Array com os coeficientes do polinômio.
- * @ordem: Grau do polinômio.
+ * @grau: Grau do polinômio.
  * @intervalo: Intervalo para calculo do método.
  *
  * Retorno: Raiz aproximada do polinômio contida no intervalo.
  */
-double metodo_da_bissecao(double *polinomio, int ordem, double *intervalo) {
+double metodo_da_bissecao(double *polinomio, int grau, double *intervalo) {
     double a = intervalo[0], b = intervalo[1];
     double m, erro, f_a, f_m;
 
@@ -334,9 +325,9 @@ double metodo_da_bissecao(double *polinomio, int ordem, double *intervalo) {
         f_a = 0;
         f_m = 0;
         // Calcula p(a) e p(m)
-        for (int xi = ordem; xi >= 0; xi--) {
-            f_a += polinomio[ordem - xi] * pow(a, xi);
-            f_m += polinomio[ordem - xi] * pow(m, xi);
+        for (int xi = grau; xi >= 0; xi--) {
+            f_a += polinomio[grau - xi] * pow(a, xi);
+            f_m += polinomio[grau - xi] * pow(m, xi);
         }
         // Substitui m em a caso f(a)xf(m) > 0
         if (f_a * f_m > 0)
