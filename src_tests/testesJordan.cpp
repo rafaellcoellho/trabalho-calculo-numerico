@@ -208,3 +208,57 @@ TEST(jordan, checa_solucao_indexada_por_array_de_ordem) {
 	}
 	free(m);
 }
+
+TEST(jordan, checa_sistema_compativel_determinado) {
+	double m_valores[2][3] = {
+		{ 2 , 3 , 18 },
+		{ 3 , 4 , 25 }
+	};
+
+	double **m = aloca_matriz(2,3);
+	for(int i = 0; i<2; i++){
+		for(int j = 0; j<3; j++) {
+			m[i][j] = m_valores[i][j];
+		}
+	}
+
+	int x[2];
+	double result[2];
+
+	metodo_de_jordan(m, 2, x);
+	int tipo = soluciona_matriz_diagonal(m, 2, result);
+	
+	CHECK_EQUAL(0, tipo);	
+	
+	for (int i = 0; i < 2; i++) {
+		free(m[i]);
+	}
+	free(m);
+}
+
+TEST(jordan, checa_sistema_compativel_indeterminado) {
+	double m_valores[2][3] = {
+		{ 4 , 2 , 100 },
+		{ 8 , 4 , 200 }
+	};
+
+	double **m = aloca_matriz(2,3);
+	for(int i = 0; i<2; i++){
+		for(int j = 0; j<3; j++) {
+			m[i][j] = m_valores[i][j];
+		}
+	}
+
+	int x[2];
+	double result[2];
+
+	metodo_de_jordan(m, 2, x);
+	int tipo = soluciona_matriz_diagonal(m, 2, result);
+	
+	CHECK_EQUAL(1, tipo);	
+	
+	for (int i = 0; i < 2; i++) {
+		free(m[i]);
+	}
+	free(m);
+}
