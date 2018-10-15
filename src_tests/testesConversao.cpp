@@ -126,3 +126,25 @@ TEST(conversao, numero_fracionario_para_hexadecimal)
 	string = converte(0.4765625, 16);
 	STRCMP_EQUAL("0.7A", string);
 }
+
+/*
+	Testes conversão com valores negativos
+*/
+
+TEST(conversao, valor_negativo_binario)
+{
+	string = converte(-123, 2);
+	STRCMP_EQUAL("-1111011.0", string);
+}
+
+TEST(conversao, valor_negativo_octal)
+{
+	string = converte(-123, 8);
+	STRCMP_EQUAL("-173.0", string);
+}
+
+TEST(conversao, valor_negativo_hexadecimal)
+{
+	string = converte(-123, 16);
+	STRCMP_EQUAL("-7B.0", string);
+}

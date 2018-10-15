@@ -4,6 +4,7 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 #include "ep1.h"
 
@@ -28,6 +29,11 @@ char *converte(double numero_decimal, int base_destino)
 	double parte_inteira, parte_fracionaria;
 	char *numero_convertido = calloc(50, sizeof(char));
 	int posicao = 0;
+	bool eh_negativo = numero_decimal < 0;
+
+	if (eh_negativo) {
+		numero_decimal = fabs(numero_decimal);
+	}
 	
 	// Separa a parte inteira da fracionária
 	parte_fracionaria = modf(numero_decimal, &parte_inteira);
@@ -42,8 +48,16 @@ char *converte(double numero_decimal, int base_destino)
 			parte_inteira = floor(parte_inteira/base_destino);
 		} while (parte_inteira > 0);
 
-		for(int i = 0; i < posicao; i++)
-			numero_convertido[i] = aux[posicao-i-1];
+		if (eh_negativo) {
+			numero_convertido[0] = '-';
+			for(int i = 1; i < posicao+1; i++)
+				numero_convertido[i] = aux[posicao-i];
+			posicao++;
+		} else {
+			for(int i = 0; i < posicao; i++)
+				numero_convertido[i] = aux[posicao-i-1];
+		}
+
 	} else {
 		numero_convertido[posicao++] = '0';
 	}
