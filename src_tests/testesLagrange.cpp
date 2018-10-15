@@ -69,15 +69,17 @@ TEST(lagrange, limites_incorretos_teorema_lagrange) {
 TEST(lagrange, teorema_de_bolzano_intervalo_com_raiz) {
     double polinomio[] = { 1, 5, -3, -7, -3 };
     int ordem = 4;
+    double intervalo[] = {1.0, 2.0};
     
-    CHECK_EQUAL(0 ,teorema_de_bolzano(polinomio, ordem, 1, 2));
+    CHECK_EQUAL(0 ,teorema_de_bolzano(polinomio, ordem, intervalo));
 }
 
 TEST(lagrange, teorema_de_bolzano_intervalo_sem_raiz) {
     double polinomio[] = { 1, 5, -3, -7, -3 };
     int ordem = 4;
+    double intervalo[] = {2.0, 3.0};
     
-    CHECK_EQUAL(1 ,teorema_de_bolzano(polinomio, ordem, 2, 3));
+    CHECK_EQUAL(1 ,teorema_de_bolzano(polinomio, ordem, intervalo));
 }
 
 TEST(lagrange, raiz_aproximada_metodo_bissecao) {

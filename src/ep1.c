@@ -346,8 +346,10 @@ void teorema_de_lagrange(double *polinomio, int grau, double *intervalo_positivo
  * Retorno: 0 - Número ímpar de raízes
  * 					1 - Número par de raízes no intervalo
  */
-int teorema_de_bolzano(double *polinomio, int grau, double a, double b) {
+int teorema_de_bolzano(double *polinomio, int grau, double *intervalo) {
 	double f_a, f_b;
+	double a = intervalo[0];
+	double b = intervalo[1];
 
 	f_a = 0;
 	f_b = 0;
