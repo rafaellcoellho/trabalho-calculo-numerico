@@ -171,7 +171,7 @@ int soluciona_matriz_diagonal(double **m, int num_equacoes, double *raizes)
 
 	for(int i = 0; i < num_equacoes; i++) {
 		// atribui a zero caso seja variável livre
-		if((m[i][num_equacoes] && m[i][i]) == 0) {
+		if (m[i][num_equacoes] == 0 && m[i][i] == 0) {
 			raizes[i] = 0;
 			tipo = 1;
 		}

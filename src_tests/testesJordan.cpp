@@ -262,3 +262,30 @@ TEST(jordan, checa_sistema_compativel_indeterminado) {
 	}
 	free(m);
 }
+
+TEST(jordan, checa_sistema_incompativel) {
+	double m_valores[2][3] = {
+		{ 3 , 9 , 12 },
+		{ 3 , 9 , 15 }
+	};
+
+	double **m = aloca_matriz(2,3);
+	for(int i = 0; i<2; i++){
+		for(int j = 0; j<3; j++) {
+			m[i][j] = m_valores[i][j];
+		}
+	}
+
+	int x[2];
+	double result[2];
+
+	metodo_de_jordan(m, 2, x);
+	int tipo = soluciona_matriz_diagonal(m, 2, result);
+	
+	CHECK_EQUAL(2, tipo);	
+	
+	for (int i = 0; i < 2; i++) {
+		free(m[i]);
+	}
+	free(m);
+}
