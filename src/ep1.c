@@ -6,25 +6,23 @@
 
 #include "ep1.h"
 
-
 // Array auxiliar para converter um inteiro para char,
 // o inteiro é usado como índice neste array e lhe é devolvido o char correspondente
 char int_para_ascii[16] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-
 
 /******************************************************************
  *	                        CONVERSÃO                             *
  ******************************************************************/
 
 /*
- * converter() - Converte um numero de base dez para outra base.
+ * converte() - Converte um numero de base dez para outra base.
  * @numero_decimal: Numero de base dez a ser convertido.
  * @base_destino: Numero que representa a base do sistema numérico destino. 
  *								 Ex: 2 (binário), 8 (octal), 16 (hexadecimal)
  *
  * Retorno: String do numero convertido para o sistema destino.
  */
-char *converter(double numero_decimal, int base_destino)
+char *converte(double numero_decimal, int base_destino)
 {
 	double parte_inteira, parte_fracionaria;
 	char *numero_convertido = calloc(50, sizeof(char));
@@ -73,8 +71,6 @@ char *converter(double numero_decimal, int base_destino)
 	return numero_convertido;
 }
 
-
-
 /******************************************************************
  *	                      MÉTODO DE JORDAN                        *
  ******************************************************************/
@@ -82,38 +78,38 @@ char *converter(double numero_decimal, int base_destino)
 /*
  * metodo_de_jordan() - Executa o método de Jordan.
  * @m: Matriz aumentada.
- * @ordem_matriz_coeficientes: Numero de variáveis do sistema de equações.
+ * @num_equacoes: Numero de variáveis do sistema de equações.
  * @ordem_das_raizes: Vetor que relaciona a posição das raízes de acordo com as colunas.
  *
  */
-void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_raizes)
+void metodo_de_jordan(double **m, int num_equacoes, int *ordem_das_raizes)
 {
 	// Iteradores
 	int i, j, k;
 
 	// Mapeia a ordem das raízes de acordo com as colunas
 	int xi = 0;
-	while(xi < ordem_matriz_coeficientes) {
+	while(xi < num_equacoes) {
 		ordem_das_raizes[xi] = xi;
 		xi++;
 	}
 
 	// Percorre as linhas da matriz atribuindo pivô M(i,i)
-	for (i = 0; i < ordem_matriz_coeficientes; i++) {
+	for (i = 0; i < num_equacoes; i++) {
 		// Se pivô igual a zero, procura uma coluna a direita para trocar
 		if(m[i][i] == 0) {
 			j = i + 1;
-			while (j < ordem_matriz_coeficientes && m[i][j]==0)
+			while (j < num_equacoes && m[i][j]==0)
 				j++;
 
 			// Realiza uma troca de colunas se uma coluna válida for encontrada
-			if (j < ordem_matriz_coeficientes) {
+			if (j < num_equacoes) {
 				// A ordem das raízes são rearranjadas
 				ordem_das_raizes[i] = j;
 				ordem_das_raizes[j] = i;
 
 				double aux;
-				for(k = 0; k < ordem_matriz_coeficientes; k++) {
+				for(k = 0; k < num_equacoes; k++) {
 					aux = m[k][i];
 					m[k][i] = m[k][j];
 					m[k][j] = aux;
@@ -121,7 +117,7 @@ void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_
 			}
 			// Se uma coluna valida não for encontrada, atribui-se zero aos elementos da coluna do pivô
 			else {
-				for(k = 0; k < ordem_matriz_coeficientes; k++)
+				for(k = 0; k < num_equacoes; k++)
 					m[k][i] = 0;
 			}
 		}
@@ -129,11 +125,11 @@ void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_
 		// Se o pivô é diferente de zero é calculado o multiplicador
 		// e é feita as operações nas linhas abaixo e acima
 		if (m[i][i] != 0) {
-			for (j = 0; j < ordem_matriz_coeficientes; j++) {
+			for (j = 0; j < num_equacoes; j++) {
 				if (j != i) {
 					double multiplicador = -m[j][i] / m[i][i];
 					m[j][i] = 0;
-					for (k = i+1; k <= ordem_matriz_coeficientes; k++) {
+					for (k = i+1; k <= num_equacoes; k++) {
 						m[j][k] += multiplicador * m[i][k];
 					}
 				}
@@ -143,10 +139,10 @@ void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_
 }
 
 /*
- * solucionar_matriz_jordan() - Encontra as raízes de um sistema de equações após
+ * soluciona_matriz_diagonal() - Encontra as raízes de um sistema de equações após
  *															ser diagonalizado pelo método de Jordan.
  * @m: Matriz aumentada.
- * @ordem_matriz_coeficientes: Numero de variáveis do sistema de equações.
+ * @num_equacoes: Numero de variáveis do sistema de equações.
  * @raizes: Vetor com as raízes do sistema.
  *
  * Retorno: Tipo do sistema linear.
@@ -154,23 +150,23 @@ void metodo_de_jordan(double **m, int ordem_matriz_coeficientes, int *ordem_das_
  *					1 - Compatível Indeterminado
  *					2 - Incompatível.
  */
-int solucionar_matriz_jordan(double **m, int ordem_matriz_coeficientes, double *raizes)
+int soluciona_matriz_diagonal(double **m, int num_equacoes, double *raizes)
 {
 	int tipo = 0;
 
-	for(int i = 0; i < ordem_matriz_coeficientes; i++) {
+	for(int i = 0; i < num_equacoes; i++) {
 		// atribui a zero caso seja variável livre
-		if((m[i][ordem_matriz_coeficientes] && m[i][i]) == 0) {
+		if((m[i][num_equacoes] && m[i][i]) == 0) {
 			raizes[i] = 0;
 			tipo = 1;
 		}
 		// retorna incompatível caso coeficiente seja zero e o termo independente não
-		else if (m[i][ordem_matriz_coeficientes] != 0 && m[i][i] == 0) {
+		else if (m[i][num_equacoes] != 0 && m[i][i] == 0) {
 			return 2;
 		}
 		// realiza calculo da raiz e adiciona na lista de raízes
 		else 
-			raizes[i] = m[i][ordem_matriz_coeficientes] / m[i][i];
+			raizes[i] = m[i][num_equacoes] / m[i][i];
 	}
 
 	return tipo;
@@ -181,31 +177,31 @@ int solucionar_matriz_jordan(double **m, int ordem_matriz_coeficientes, double *
  ******************************************************************/
 
 /*
- * inverter_array() - Inverte o conteuÚo do array.
+ * inverte_array() - Inverte o conteuÚo do array.
  * @array: Array a ser convertido.
  * @n: Numero de elementos de array.
  *
  */
-void inverter_array(double *array, int n) {
-    int t, end = n - 1;
+void inverte_array(double *array, int n) {
+    int t, final = n - 1;
 
     for (int c = 0; c < n/2; c++) {
-        t          = array[c];
-        array[c]   = array[end];
-        array[end] = t;
+        t = array[c];
+        array[c] = array[final];
+        array[final] = t;
     
-        end--;
+        final--;
     }
 }
 
 /*
- * trocar_sinais_dos_coeficientes_An_com_n_impar() - Troca os sinais dos coeficientes que multiplicam 
+ * inverte_sinal() - Troca os sinais dos coeficientes que multiplicam 
  *																									 variavel elevado a potencia impar.
  * @polinomio: Array com os coeficientes do polinômio.
  * @ordem: Grau do polinômio.
  *
  */
-void trocar_sinais_dos_coeficientes_An_com_n_impar(double *polinomio, int ordem) {
+void inverte_sinal(double *polinomio, int ordem) {
     for (int i = 0; i <= ordem; i++) {
         // Se a ordem - indice é impar, significa que n é impar
         // Ex.: 4-0 = 0, logo nao inverte / 4-1 = 3, logo inverte o sinal
@@ -225,7 +221,7 @@ void trocar_sinais_dos_coeficientes_An_com_n_impar(double *polinomio, int ordem)
  */
 
 /*
- * calcular_limite() - Calcula limite da raiz de um polinômio de acordo com
+ * calcula_limite() - Calcula limite da raiz de um polinômio de acordo com
  * 										 formula: L = 1 + raiz(n-k) de b/An.
  * @polinomio: Array com os coeficientes do polinômio.
  * @ordem: Grau do polinômio.
@@ -233,15 +229,15 @@ void trocar_sinais_dos_coeficientes_An_com_n_impar(double *polinomio, int ordem)
  * Retorno: Limite da raiz do polinômio, 
  * 					caso não exista raízes reais retorna -1.
  */
-double calcular_limite(double *polinomio, int ordem) {
+double calcula_limite(double *polinomio, int ordem) {
     double n, an, k, b;
-    int multiplicadoPorUmNegativo = 0;
+    int sinal_invertido = 0;
 
     // Se An for negativo, multiplica-se o polinômio por -1
     if (polinomio[0] < 0) {
         for (int i = 0; i <= ordem; i++)
             polinomio[i] *= -1;
-        multiplicadoPorUmNegativo = 1;
+        sinal_invertido = 1;
     }
 
     n = ordem;
@@ -265,7 +261,7 @@ double calcular_limite(double *polinomio, int ordem) {
     }
 
     // Desfaz a multiplição por -1 se esta foi feita previamente
-    if (multiplicadoPorUmNegativo == 1) {
+    if (sinal_invertido == 1) {
         for (int i = 0; i <= ordem; i++)
             polinomio[i] *= -1;
     }
@@ -279,7 +275,7 @@ double calcular_limite(double *polinomio, int ordem) {
 }
 
 /*
- * aplicar_teorema_de_langrange() - Encontra o intervalo das raízes reais positivas 
+ * teorema_de_lagrange() - Encontra o intervalo das raízes reais positivas 
  * 																	e negativas de um polinômio.
  * @polinomio: Array com os coeficientes do polinômio.
  * @ordem: Grau do polinômio.
@@ -287,28 +283,28 @@ double calcular_limite(double *polinomio, int ordem) {
  * @intervalo_negativo: Array para o intervalo das raízes negativas.
  *
  */
-void aplicar_teorema_de_langrange(double *polinomio, int ordem, double *intervalo_positivo, double *intervalo_negativo) {
+void teorema_de_lagrange(double *polinomio, int ordem, double *intervalo_positivo, double *intervalo_negativo) {
     double l, l1, l2, l3;
     
-    l = calcular_limite(polinomio, ordem);
+    l = calcula_limite(polinomio, ordem);
 
     // Inverte coeficientes do polinômio para encontrar p1
-    inverter_array(polinomio, ordem+1);
-    l1 = calcular_limite(polinomio, ordem);
+    inverte_array(polinomio, ordem+1);
+    l1 = calcula_limite(polinomio, ordem);
 
     // Retorna os coeficientes a ordem polinômio original e 
     // inverte os sinais para encontrar p2
-    inverter_array(polinomio, ordem+1);
-    trocar_sinais_dos_coeficientes_An_com_n_impar(polinomio, ordem);
-    l2 = calcular_limite(polinomio, ordem);
+    inverte_array(polinomio, ordem+1);
+    inverte_sinal(polinomio, ordem);
+    l2 = calcula_limite(polinomio, ordem);
 
     // Inverte os coeficientes para encontra p3
-    inverter_array(polinomio, ordem+1);
-    l3 = calcular_limite(polinomio, ordem);
+    inverte_array(polinomio, ordem+1);
+    l3 = calcula_limite(polinomio, ordem);
 
     // Devolvendo o polinômio ao estado inicial
-    inverter_array(polinomio, ordem+1);
-    trocar_sinais_dos_coeficientes_An_com_n_impar(polinomio, ordem);
+    inverte_array(polinomio, ordem+1);
+    inverte_sinal(polinomio, ordem);
     
     intervalo_positivo[0] = 1.0/l1;
     intervalo_positivo[1] = l;
@@ -317,7 +313,7 @@ void aplicar_teorema_de_langrange(double *polinomio, int ordem, double *interval
 }
 
 /*
- * aplicar_metodo_da_bissecao() - Aplica o método da bisseção em um polinômio
+ * metodo_da_bissecao() - Aplica o método da bisseção em um polinômio
  * 										 						dado um intervalo e é retornado uma raiz aproximada.
  * @polinomio: Array com os coeficientes do polinômio.
  * @ordem: Grau do polinômio.
@@ -325,7 +321,7 @@ void aplicar_teorema_de_langrange(double *polinomio, int ordem, double *interval
  *
  * Retorno: Raiz aproximada do polinômio contida no intervalo.
  */
-double aplicar_metodo_da_bissecao(double *polinomio, int ordem, double *intervalo) {
+double metodo_da_bissecao(double *polinomio, int ordem, double *intervalo) {
     double a = intervalo[0], b = intervalo[1];
     double m, erro, f_a, f_m;
 
@@ -457,8 +453,6 @@ void mostra_matriz(double **matriz, int linhas, int colunas)
 	}
 }
 
-
-
 /******************************************************************
  *	                             MENU                             *
  ******************************************************************/
@@ -491,9 +485,9 @@ void menu(void)
 			case 'C':
 				printf("Digite um numero para ser convertido: ");
 				scanf("%lf", &numero);
-				printf("\nBin: %s", converter(numero, 2));
-				printf("\nOctal: %s", converter(numero, 8));
-				printf("\nHex: %s", converter(numero, 16));
+				printf("\nBin: %s", converte(numero, 2));
+				printf("\nOctal: %s", converte(numero, 8));
+				printf("\nHex: %s", converte(numero, 16));
 				printf("\n");
 				break;
 
@@ -504,7 +498,7 @@ void menu(void)
 				if (matriz != NULL) {
 					metodo_de_jordan(matriz, numero_de_linhas, ordem_das_raizes);
 					mostra_matriz(matriz, numero_de_linhas, numero_de_linhas+1);
-					int tipo = solucionar_matriz_jordan(matriz, numero_de_linhas, resultado);
+					int tipo = soluciona_matriz_diagonal(matriz, numero_de_linhas, resultado);
 					printf("\n");
 					if (tipo == 2) {
 						printf("Sistema Linear Incompativel\n");

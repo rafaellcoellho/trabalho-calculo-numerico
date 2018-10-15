@@ -167,7 +167,7 @@ TEST(jordan, checa_solucao) {
 	double result[3];
 
 	metodo_de_jordan(m, 3, x);
-	solucionar_matriz_jordan(m, 3, result);
+	soluciona_matriz_diagonal(m, 3, result);
 
 	DOUBLES_EQUAL(3, result[0], 0.001);
 	DOUBLES_EQUAL(2, result[1], 0.001);
@@ -197,7 +197,7 @@ TEST(jordan, checa_solucao_indexada_por_array_de_ordem) {
 	double result[3];
 
 	metodo_de_jordan(m, 3, x);
-	solucionar_matriz_jordan(m, 3, result);
+	soluciona_matriz_diagonal(m, 3, result);
 
 	DOUBLES_EQUAL(-7, result[x[0]], 0.001);
 	DOUBLES_EQUAL(0, result[x[1]], 0.001);
