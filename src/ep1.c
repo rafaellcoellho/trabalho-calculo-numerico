@@ -573,7 +573,7 @@ void menu(void)
 			case 'E':
 				printf("\nInsira o grau da equacao: ");
 				scanf("%d", &grau_da_eq);
-				polinomio = malloc(sizeof(double) * (grau_da_eq+1) );
+				polinomio = malloc(sizeof(double) * (uint32_t)(grau_da_eq+1) );
 				if (polinomio != NULL) {
 					for (int i = 0; i < grau_da_eq; i++){
 						printf("Coeficiente %d: ", grau_da_eq-i);
