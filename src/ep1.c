@@ -583,8 +583,12 @@ void menu(void)
 					scanf("%lf", &polinomio[grau_da_eq]);
 					if (polinomio[0] > 0 && polinomio[grau_da_eq] != 0) {
 						teorema_de_lagrange(polinomio, grau_da_eq, intervalo_positivo, intervalo_negativo);
-						printf("\nLimite superior positivo: %lf", intervalo_positivo[1]);
-						printf("\nLimite inferior positivo: %lf", intervalo_positivo[0]);
+						if (intervalo_positivo[0] == 0 && intervalo_positivo[1] == 0) {
+							printf("\nNao existem raizes positivas");
+						} else {
+							printf("\nLimite superior positivo: %lf", intervalo_positivo[1]);
+							printf("\nLimite inferior positivo: %lf", intervalo_positivo[0]);
+						}
 						printf("\nLimite superior negativo: %lf", intervalo_negativo[1]);
 						printf("\nLimite inferior negativo: %lf", intervalo_negativo[0]);
 						
