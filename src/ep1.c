@@ -212,7 +212,7 @@ void inverte_array(double *array, int n) {
 
 /*
  * inverte_sinal() - Troca os sinais dos coeficientes que multiplicam 
- *																									 variavel elevado a potencia impar.
+ *									 variavel elevado a potencia impar.
  * @polinomio: Array com os coeficientes do polinômio.
  * @grau: Grau do polinômio.
  *
@@ -229,7 +229,7 @@ void inverte_sinal(double *polinomio, int grau) {
 
 /*
  * calcula_limite() - Calcula limite da raiz de um polinômio de acordo com
- * 										 formula: L = 1 + raiz(n-k) de b/An.
+ * 										formula: L = 1 + raiz(n-k) de b/An.
  * @polinomio: Array com os coeficientes do polinômio.
  * @grau: Grau do polinômio.
  *
@@ -283,7 +283,7 @@ double calcula_limite(double *polinomio, int grau) {
 
 /*
  * teorema_de_lagrange() - Encontra o intervalo das raízes reais positivas 
- * 																	e negativas de um polinômio.
+ * 												 e negativas de um polinômio.
  * @polinomio: Array com os coeficientes do polinômio.
  * @grau: Grau do polinômio.
  * @intervalo_positivo: Array para o intervalo das raízes positivas.
@@ -367,7 +367,7 @@ int teorema_de_bolzano(double *polinomio, int grau, double *intervalo) {
 
 /*
  * metodo_da_bissecao() - Aplica o método da bisseção em um polinômio
- * 										 						dado um intervalo e é retornado uma raiz aproximada.
+ * 										 		dado um intervalo e é retornado uma raiz aproximada.
  * @polinomio: Array com os coeficientes do polinômio.
  * @grau: Grau do polinômio.
  * @intervalo: Intervalo para calculo do método.
