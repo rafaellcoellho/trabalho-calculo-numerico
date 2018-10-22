@@ -33,3 +33,4 @@ make clean          -> Limpa o projeto
 ## Autores
 
 * **Rafael Coelho** - [rafaellcoellho](https://github.com/rafaellcoellho)
+* **Mario Matheus** - [MarioMatheus](https://github.com/MarioMatheus)
